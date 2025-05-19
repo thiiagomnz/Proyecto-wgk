@@ -1,0 +1,55 @@
+.titulo{
+    text-align: center;
+}
+/*estilo general*/
+body{
+    background-color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+/*contenedor de las tarjetas*/
+.card-container{
+    display: flex;
+    justify-content: center;/*centrar horizontalmente*/
+    gap: 20px;/*espacio tarjeta*/
+    flex-wrap: wrap;/*permite que se acomode a la pantalla*/
+    padding: 20px;
+}
+/*tarjeta estilo*/
+.card{
+    width: 18rem;
+    background-color: rgb(255, 255, 255);
+    color:rgb(0, 0, 0);
+    border-radius: 10;
+    overflow: hidden;
+    transition: trasform 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+/*efecto de la tarjeta*/
+.card:hover{
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+/*imagen dentro de la tarjeta*/
+.card img{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+/*boton estilo*/
+.card .btn{
+    background-color: rgb(0, 0, 0);
+    color:azure;
+    border: none;
+    transition: background 0.3s ease-in-out;
+}
+.card .btn:hover{
+    background-color: rgb(0, 0, 0);
+}
+/* al momento de achicar la pantalla se acomodan las columnas*/
+@media(max-width:600px){
+    .card-container{
+        flex-direction: column;
+        align-items:center  
+    }
+}

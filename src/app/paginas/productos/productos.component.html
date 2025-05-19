@@ -1,0 +1,43 @@
+<!--
+<div class="card-container">
+<div class="card">
+    <img src="https://wegotkickspr.com/cdn/shop/files/1f7d4890632fc62abee07c5d149bdc99.jpg?v=1737598814&width=600" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Air Jordan 1 Retro High OG Universidad Azul</h5>
+      <a href="#" class="btn btn-primary">Comprar</a>
+      <h4>$150.00</h4>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://wegotkickspr.com/cdn/shop/files/ddae492e7a59c4fa328c5fe893ea5eea.jpg?v=1737598790&width=600" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Air Jordan 1 Retro High OG Universidad Azul</h5>
+      <a href="#" class="btn btn-primary">Comprar</a>
+      <h4>$250.00</h4>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://wegotkickspr.com/cdn/shop/files/accbaa576e8d7ad06cafef175bb884ae.jpg?v=1737598807&width=600" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Air Jordan 1 Retro High OG Red Black</h5>
+      <a href="#" class="btn btn-primary">Comprar</a>
+      <h4>$140.00</h4>
+    </div>
+  </div>
+  </div>
+ -->
+  <div class="card-container">
+    <ng-container *ngIf = "Productos && Productos.length">
+      <ng-container *ngFor= "let producto of Productos">
+        <div *ngIf = "producto.disponible" class="card">
+        <img [src]="producto.imagen" alt="{{producto.nombre}}" class="product-image">
+        <h5>{{producto.nombre}}</h5>
+        <h4>${{producto.precio}}</h4>
+        <button type="button" class="btn btn-outline-primary" (click)="agregar(producto)">Agregar al carrito</button>
+        <p></p>
+        <button type="button" class="btn btn-outline-primary" (click)="agregarFav(producto)">Agregar a favoritos</button>
+      </div>
+      </ng-container>
+    </ng-container>
+  </div>
+   
