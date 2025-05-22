@@ -1,55 +1,77 @@
-.titulo{
-    text-align: center;
+/* Título centrado */
+.titulo {
+  text-align: center;
+  color: #ffffff;
+  font-size: 2rem;
+  margin-bottom: 2rem;
 }
-/*estilo general*/
-body{
-    background-color: rgb(0, 0, 0);
-    color: rgb(0, 0, 0);
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+/* Estilo general */
+body {
+  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
 }
-/*contenedor de las tarjetas*/
-.card-container{
-    display: flex;
-    justify-content: center;/*centrar horizontalmente*/
-    gap: 20px;/*espacio tarjeta*/
-    flex-wrap: wrap;/*permite que se acomode a la pantalla*/
-    padding: 20px;
+
+/* Contenedor de las tarjetas */
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 40px;
 }
-/*tarjeta estilo*/
-.card{
-    width: 18rem;
-    background-color: rgb(255, 255, 255);
-    color:rgb(0, 0, 0);
-    border-radius: 10;
-    overflow: hidden;
-    transition: trasform 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+
+/* Estilo de tarjeta */
+.card {
+  width: 18rem;
+  background-color: #ffffff;
+  color: #000e4d;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
-/*efecto de la tarjeta*/
-.card:hover{
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+
+/* Hover de tarjeta */
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
 }
-/*imagen dentro de la tarjeta*/
-.card img{
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+
+/* Imagen de tarjeta */
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
-/*boton estilo*/
-.card .btn{
-    background-color: rgb(0, 0, 0);
-    color:azure;
-    border: none;
-    transition: background 0.3s ease-in-out;
+
+/* Botón */
+.card .btn {
+  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 10px 10px;
+  width: 100%;
+  transition: background 0.3s ease;
 }
-.card .btn:hover{
-    background-color: rgb(0, 0, 0);
+
+.card .btn:hover {
+  background: #000e4d;
 }
-/* al momento de achicar la pantalla se acomodan las columnas*/
-@media(max-width:600px){
-    .card-container{
-        flex-direction: column;
-        align-items:center  
-    }
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  .card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 90%;
+  }
 }

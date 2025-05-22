@@ -28,17 +28,11 @@
               ({{cantidadProductos}})
             </span>
           </a>
-        </li>
+        </li> 
           <li class="nav-item">
             <a class="nav-link" routerLink="/favoritos"><i class="fa-solid fa-heart"></i></a>
           </li>
            <li>
-          <a [routerLink]="['/carrito']">
-            <i class="bi bi-cart"></i>
-            <span *ngIf="cantidadProductos >0">
-              ({{cantidadProductos}})
-            </span>
-          </a>
         </li>
         </ul>
         <form class="d-flex" role="search">

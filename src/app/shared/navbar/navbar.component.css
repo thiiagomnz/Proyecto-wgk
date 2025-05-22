@@ -1,3 +1,132 @@
-form{
-    color: black;
+/* NAVBAR GLOBAL */
+.navbar {
+  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.8rem 1.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.navbar-nav .nav-link {
+  color: white;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #f8f9fa;
+}
+.navbar-nav i {
+  color: #f8f9fa;
+}
+
+/* LOGO */
+.navbar-brand img { 
+  max-height: 100px;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.05);
+}
+
+/* LINKS */
+.navbar-nav .nav-link {
+  color: #000000;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #000000;
+}
+
+.navbar-nav .nav-link.disabled {
+  color: #000000;
+  cursor: not-allowed;
+}
+
+/* ICONOS */
+.navbar-nav .fa-cart-shopping,
+.navbar-nav .fa-heart,
+.navbar-nav .fa-magnifying-glass,
+.navbar-nav .bi-cart {
+  font-size: 1.2rem;
+  color: #000000;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav i:hover {
+  color: #000000;
+}
+
+/* CANTIDAD EN CARRITO */
+.navbar-nav span {
+  color: #fff;
+  background-color: #0d6efd;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  margin-left: 5px;
+}
+
+/* BUSCADOR */
+form.d-flex input.form-control {
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+}
+
+form.d-flex input.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: none;
+}
+
+form.d-flex button {
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  border: 1px solid #0d6efd;
+  color: #0d6efd;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+form.d-flex button:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+/* TOGGLER ICON */
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%2833, 37, 41, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* RESPONSIVE */
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    text-align: center;
+  }
+
+  .navbar-nav .nav-item {
+    margin-bottom: 0.5rem;
+  }
+
+  form.d-flex {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  form.d-flex input.form-control,
+  form.d-flex button {
+    width: 100%;
+  }
 }
