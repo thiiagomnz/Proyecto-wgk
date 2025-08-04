@@ -1,0 +1,60 @@
+.form-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  padding: 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.text-white {
+  color: white;
+}
+
+input, select, button {
+  border-radius: 10px;
+}
+
+button[type="submit"] {
+  background-color: #b34700;
+  border-color: #b34700;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #000000;
+  border-color: #000000;
+}
+
+/* Modificar modal si es necesario */
+.modal-content {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.modal-footer button {
+  border-radius: 10px;
+}
+
+.modal-footer .btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+.modal-footer .btn:hover {
+  opacity: 0.8;
+}

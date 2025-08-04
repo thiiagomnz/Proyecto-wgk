@@ -1,31 +1,53 @@
-/* Estilos generales */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
+/* CONTENEDOR PRINCIPAL CON FONDO */
+.carrito-page {
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  min-height: 100vh;
   padding: 2rem;
-  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Título */
-h1 {
+/* CAJA DEL CARRITO */
+.carrito-box {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 1100px;
+  width: 100%;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* TÍTULO */
+.carrito-box h1 {
   text-align: center;
-  margin-bottom: 2rem;
-  color: #ffffff;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #b34700;
+  font-weight: bold;
 }
 
-/* Tabla del carrito */
+/* MENSAJE DE CARRITO VACÍO */
+.carrito-box p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 1rem;
+}
+
+/* TABLA */
 .table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #ffffff;
-  color: #333;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .table thead {
-  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
   color: white;
 }
 
@@ -33,80 +55,103 @@ h1 {
 .table td {
   padding: 1rem;
   text-align: center;
-  vertical-align: middle;
   border-bottom: 1px solid #ddd;
+  vertical-align: middle;
 }
 
 .table img {
-  max-width: 100%;
-  height: 40%;
-  object-fit: contain;
+  width: 100px;
+  height: auto;
   border-radius: 8px;
+  object-fit: contain;
 }
 
-/* Botones de cantidad y acción */
-button {
-  padding: 0.4rem 0.8rem;
-  margin: 0 0.2rem;
+/* BOTONES DE CANTIDAD */
+.quantity-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.quantity-buttons button {
+  padding: 0.3rem 0.7rem;
+  background: #b34700;
+  color: white;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
   font-weight: bold;
-  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
+  cursor: pointer;
+}
+
+.quantity-buttons button:hover {
+  background: #8a2e00;
+}
+
+/* BOTÓN ELIMINAR */
+button {
+  padding: 0.4rem 1rem;
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
   color: white;
-  transition: all 0.3s ease;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  background: #000e4d;
+  background: linear-gradient(90deg, #a14000 0%, #111 100%);
+}
+
+/* TOTAL Y COMPRA */
+.total-box {
+  text-align: right;
+  margin-top: 2rem;
+}
+
+.total-box h4 {
+  color: #000;
+  font-weight: bold;
+}
+
+.total-box button {
+  margin-top: 0.5rem;
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
   color: #fff;
-}
-
-button:active {
-  transform: scale(0.96);
-}
-
-/* Botón de compra */
-.btn-success {
-  display: block;
-  margin: 2rem auto;    
-  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
-  color: white;
-  padding: 0.8rem 2rem;
-  font-size: 1.1rem;
   border: none;
+  padding: 0.6rem 1.2rem;
   border-radius: 6px;
-  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.btn-success:hover {
-  background-color: #000e4d;
+.total-box button:hover {
+  background: linear-gradient(90deg, #8a2e00 0%, #111 100%);
 }
 
-/* Mensaje cuando el carrito está vacío */
-div[ngif] p {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #ffffffb3;
-}
-
-/* Responsive */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .table thead {
     display: none;
   }
 
-  .table, .table tbody, .table tr, .table td {
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
     display: block;
     width: 100%;
   }
 
   .table tr {
     margin-bottom: 1rem;
+    background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 0.5rem;
-    background-color: #ffffff;
   }
 
   .table td {
@@ -121,30 +166,15 @@ div[ngif] p {
     left: 1rem;
     top: 1rem;
     font-weight: bold;
-    color: #0d6efd;
+    color: #b34700;
     text-align: left;
   }
 
-  .btn-success {
-    width: 100%;
-    font-size: 1rem;
+  .table img {
+    width: 80px;
   }
-}
-.quantity-buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
 
-.quantity-buttons button {
-  padding: 0.3rem 0.6rem;
-  font-size: 1rem;
-}
-
-.quantity-buttons span {
-  font-weight: bold;
-  min-width: 2rem;
-  text-align: center;
-  display: inline-block;
+  .total-box {
+    text-align: center;
+  }
 }

@@ -1,0 +1,54 @@
+/* FOOTER - ESTILO GENERAL */
+.footer {
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  color: #fff;
+  padding: 20px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-top: 1px solid #ffffff;
+  text-align: center;
+}
+
+/* CONTENEDOR DE REDES Y CONTACTO */
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 100px;
+  flex-wrap: wrap;
+}
+
+/* CADA COLUMNA */
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* TÍTULOS (REDES / CONTACTO) */
+.footer-section p {
+  
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+/* LINKS CON ICONOS */
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #ffcc99;
+}
+
+.footer-link img {
+  width: 20px;
+  height: 20px;
+}

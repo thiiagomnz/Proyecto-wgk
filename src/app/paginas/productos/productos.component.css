@@ -1,77 +1,119 @@
-/* Título centrado */
-.titulo {
-  text-align: center;
-  color: #ffffff;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-}
-
-/* Estilo general */
+/* FONDO GENERAL DE TODA LA PÁGINA */
 body {
-  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
-  color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 0;
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
 }
 
-/* Contenedor de las tarjetas */
+/* FILTROS */
+.filtros {
+  padding: 1.5rem;
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  border-bottom: 1px solid #222;
+}
+
+.filtros label {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.form-select,
+.form-control {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.95rem;
+}
+
+/* BOTÓN DE LIMPIAR */
+.filtros button.btn {
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  transition:  0.3s ease;
+}
+
+.filtros button.btn:hover {
+  background: #222;
+}
+
+/* CONTENEDOR DE PRODUCTOS */
 .card-container {
   display: flex;
-  justify-content: center;
-  gap: 20px;
   flex-wrap: wrap;
-  padding: 40px;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
 }
 
-/* Estilo de tarjeta */
+/* TARJETA DE PRODUCTO */
 .card {
-  width: 18rem;
-  background-color: #ffffff;
-  color: #000e4d;
+  background-color: #fff;
+  color: #000;
   border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  padding: 1rem;
+  max-width: 250px;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.2s ease;
 }
 
-/* Hover de tarjeta */
 .card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  transform: scale(1.02);
 }
 
-/* Imagen de tarjeta */
-.card img {
+.product-image {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
 }
 
-/* Botón */
-.card .btn {
-  background: linear-gradient(90deg, #0d6efd 0%, #000e4d 100%);
-  color: #ffffff;
-  font-weight: bold;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0 0 10px 10px;
+/* TÍTULOS Y TEXTOS DE PRODUCTOS */
+.card h2 {
+  font-size: 1rem;
+  color: #b34700;
+  margin-bottom: 0.3rem;
+}
+
+.card p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+}
+
+/* BOTONES DE ACCIÓN */
+.card button {
+  margin-top: 0.5rem;
   width: 100%;
-  transition: background 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:  0.3s ease, color 0.3s ease;
 }
 
-.card .btn:hover {
-  background: #000e4d;
+.card .btn-outline-primary {
+  background-color: transparent;
+  border: 1px solid #b34700;
+  color: #b34700;
 }
 
-/* Responsive para móviles */
-@media (max-width: 600px) {
-  .card-container {
-    flex-direction: column;
-    align-items: center;
-  }
+.card .btn-outline-primary:hover {
+  background-color: #b34700;
+  color: #fff;
+}
 
-  .card {
-    width: 90%;
-  }
+/* MENSAJE SI NO HAY PRODUCTOS */
+.text-muted {
+  color: #ddd;
+  font-size: 1rem;
+  padding: 2rem;
 }

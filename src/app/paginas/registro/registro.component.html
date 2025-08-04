@@ -1,0 +1,43 @@
+<div class="card-container">
+    <div class="card-box">
+        <h2>Registrarse</h2>
+
+        <form (submit)="onRegister()" class="card-form">
+            <div class="input-group">
+                <label for="fullname">Nombre Completo</label>
+                <input type="text" id="fullname" name="fullname" required placeholder="Introduce tu nombre"/>
+            </div>
+
+             <div class="input-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" required placeholder="Introduce tu correo"/>
+            </div>
+
+             <div class="input-group">
+                <label for="username">Usuario</label>
+                <input type="text" id="username" name="username" required placeholder="Elegi un usuario"/>
+            </div>
+
+             <div class="input-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required placeholder="Crea una contraseña"/>
+            </div>
+
+             <div class="input-group">
+                <label for="confirmPassword">Confirmar Contraseña</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Repite tu contraseña"/>
+            </div>
+
+            <button type="submit" class="card-btn">Registrarse</button>
+
+            <p class="or-text">ó</p>
+
+            <button type="button" class="card-btn google-btn">
+                <i class="fa fa-google"></i>Registrarse con Google
+            </button>
+
+            <div class="signup-text">
+                <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
+            </div>
+        </form>
+    </div>

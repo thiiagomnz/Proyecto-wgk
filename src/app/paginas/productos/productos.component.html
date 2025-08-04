@@ -26,7 +26,67 @@
   </div>
   </div>
  -->
+  <div class="filtros">
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <label>Marca:</label>
+        <select class="form-select" [(ngModel)]="selectedCategory" name="marca">
+          <option value="">Todas</option>
+          <option *ngFor="let marca of marca" [value]="marca">{{ marca }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label>Precio min:</label>
+        <input type="number" class="form-control" [(ngModel)]="minPrecio" name="minPrecio">
+      </div>
+
+      <div class="col-md-2">
+        <label>Precio Max:</label>
+        <input type="number" class="form-control" [(ngModel)]="maxPrecio" name="maxPrecio">
+      </div>
+
+      <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-secondary w-100" (click)="resetFilters()">
+          <div class="button-top">Limpiar</div>
+        </button>
+      </div>
+    </div>
+  </div>  
+
   <div class="card-container">
+    <ng-container *ngIf="filteredProducts && filteredProducts.length">
+      <ng-container *ngFor="let producto of filteredProducts">
+        <div *ngIf="producto.disponible" class="card">
+          <img [src]="producto.imagen" alt="{{producto.nombre}}" class="product-image">
+          <h2>{{producto.nombre}}</h2>
+          <p>Precio: {{producto.precio}}</p>
+          <p>Cantidad: {{producto.cantidad}}</p>
+          <p>Marca: {{producto.marca}}</p>
+          <i class="bi bi-hand-thumbs-up"></i>
+
+          <button type="button" class="btn btn-outline-primary" (click)="agregar(producto)">Agregar al carrito</button>
+          <button type="button" class="btm btn-outline-primary" (click)="agregarFav(producto)">Agregar a favoritos</button>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <div *ngIf="filteredProducts.length === 0" class="text-muted">
+      No se encontraron productos que coincidan con los filtros.
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+ <!--<div class="card-container">
     <ng-container *ngIf = "Productos && Productos.length">
       <ng-container *ngFor= "let producto of Productos">
         <div *ngIf = "producto.disponible" class="card">
@@ -39,5 +99,5 @@
       </div>
       </ng-container>
     </ng-container>
-  </div>
+  </div> -->
    

@@ -1,0 +1,113 @@
+/* CONTENEDOR PRINCIPAL */
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem;
+}
+
+/* CAJA DEL FORMULARIO */
+.card-box {
+  background-color: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+/* TÍTULO */
+.card-box h2 {
+  margin-bottom: 1.5rem;
+  color: #b34700;
+  font-size: 1.8rem;
+}
+
+/* GRUPO DE INPUTS */
+.input-group {
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #b34700;
+  outline: none;
+}
+
+/* BOTÓN PRINCIPAL */
+.card-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.card-btn:hover {
+  background: linear-gradient(90deg, #a14000 0%, #111 100%);
+}
+
+/* TEXTO "Ó" */
+.or-text {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* BOTÓN DE GOOGLE */
+.google-btn {
+  background-color: white;
+  color: #f5f5f5;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.google-btn i {
+  color: #ffffff; /* color Google */
+  font-size: 1.2rem;
+}
+
+/* TEXTO DE REGISTRO */
+.signup-text {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.signup-text a {
+  color: #b34700;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}
