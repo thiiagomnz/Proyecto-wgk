@@ -24,16 +24,6 @@
   transition: color 0.3s ease;
 }
 
-.navbar-nav .nav-link:hover,
-.navbar-nav .nav-link.active {
-  color: #f8f9fa;
-}
-
-.navbar-nav .nav-link.disabled {
-  color: #ffffff;
-  cursor: not-allowed;
-}
-
 /* ICONOS */
 .navbar-nav .fa-cart-shopping,
 .navbar-nav .fa-heart,
