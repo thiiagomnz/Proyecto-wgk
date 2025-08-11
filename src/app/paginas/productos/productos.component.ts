@@ -125,10 +125,4 @@ export class ProductosComponent {
       (this.maxPrecio === null || p.precio<=this.maxPrecio)
       )
     }
-
-    mostrarSubmenu: boolean = false;
-
-filtrarPorMarca(marca: string): void {
-  this.selectedBrand = marca;
-}
 }

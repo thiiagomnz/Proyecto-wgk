@@ -10,23 +10,27 @@ import { IniciodesesionComponent } from './paginas/iniciodesesion/iniciodesesion
 import { RegistroComponent } from './paginas/registro/registro.component';
 
 export const routes: Routes = [
-    {path: "", redirectTo:"/inicio", pathMatch:"full"},
+    { path: "", redirectTo: "/inicio", pathMatch: "full" },
 
-    {path:"inicio", component:InicioComponent},
+    { path: "inicio", component: InicioComponent },
 
-    {path:"contacto", component:ContactosComponent},
+    { path: "contacto", component: ContactosComponent },
 
-    {path:"producto", component:ProductosComponent},
+    { path: "producto", component: ProductosComponent },
 
-    {path:"quienesomos", component:QuienesSomosComponent},
+    { path: "quienesomos", component: QuienesSomosComponent },
 
-    {path:"carrito", component:CarritoComponent},
+    { path: "carrito", component: CarritoComponent },
 
-    {path:"favoritos", component:FavoritosComponent},
+    { path: "favoritos", component: FavoritosComponent },
 
-    {path:"compra", component:CompraComponent},
+    { path: "compra", component: CompraComponent },
 
-    {path:"iniciodesesion", component:IniciodesesionComponent},
+    { path: "iniciodesesion", component: IniciodesesionComponent },
 
-    {path:"registro", component:RegistroComponent},
+    { path: "registro", component: RegistroComponent },
+
+    { path: "producto", component: ProductosComponent },
+
+    { path: "producto/:marca", component: ProductosComponent },
 ];

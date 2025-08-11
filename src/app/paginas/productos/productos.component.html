@@ -26,8 +26,6 @@
   </div>
   </div>
  -->
-  
- <!-- Navbar con submenú al pasar el mouse -->
 
 
 <!-- Contenedor de productos -->
@@ -38,7 +36,7 @@
         <img [src]="producto.imagen" class="card-img-top" alt="{{ producto.nombre }}">
         <div class="card-body">
           <h5 class="card-title">{{ producto.nombre }}</h5>
-          <p class="card-text">Precio: ${{ producto.precio }}</p>
+          <p class="card-text">${{ producto.precio }}</p>
           <button class="btn btn-success me-2" (click)="agregar(producto)">Agregar al carrito</button>
           <button class="btn btn-outline-light" (click)="agregarFav(producto)">agregar a favoritos</button>
         </div>

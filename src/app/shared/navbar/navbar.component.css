@@ -57,7 +57,7 @@ form.d-flex input.form-control {
 }
 
 form.d-flex input.form-control:focus {
-  border-color: #b34700;
+  border-color: #ffffff;
   box-shadow: none;
 }
 
@@ -65,15 +65,10 @@ form.d-flex button {
   border-radius: 20px;
   padding: 0.5rem 1rem;
   margin-left: 0.5rem;
-  border: 1px solid#b34700;
+  border: 1px solid #ffffff; 
   color: #ffffff;
-  background-color: #b34700;
+  background-color: transparent;
   transition: all 0.3s ease;
-}
-
-form.d-flex button:hover {
-  background-color: #000000;
-  color: white;
 }
 
 /* TOGGLER ICON */
