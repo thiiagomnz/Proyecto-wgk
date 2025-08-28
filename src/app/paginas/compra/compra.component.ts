@@ -53,7 +53,7 @@ export class CompraComponent implements OnInit{
                 ciudad:['',Validators.required],
                   provincia:['',Validators.required],
                     metodoPago:['',Validators.required]
-    })
+    });
   }
   //calcular el total de la compra sumando el subtotal y el costo de envio
   calcularTotal():number{
@@ -70,7 +70,7 @@ export class CompraComponent implements OnInit{
 
      //construye el objeto factura con toda la info necesaria
   this.factura = {
-    Cliente: datosCliente,
+    cliente: datosCliente,
     productos: productos,
     envio: this.envio,
     total: totalFinal,
@@ -107,30 +107,31 @@ export class CompraComponent implements OnInit{
     //informacion del cliente
    doc.text('Cliente:', 14, 40);
   const c = this.factura.cliente;
-  doc.text('Nombre: ${c.nombre}', 20, 50);
-  doc.text('Dirección: ${c.direccion}', 20, 60);
-  doc.text('Correo: ${c.correo}', 20, 70);
-  doc.text('Teléfono: ${c.telefono}', 20, 80);
-  doc.text('Ciudad: ${c.ciudad}', 20, 90);
-  doc.text('Provincia: ${c.provincia}', 20, 100);
-  doc.text('Código Postal: ${c.codigoPostal}', 20, 110);
+  doc.text(`Nombre: ${c.nombre}`, 20, 50);
+  doc.text(`Dirección: ${c.direccion}`, 20, 60);
+  doc.text(`Correo: ${c.correo}`, 20, 70);
+  doc.text(`Teléfono: ${c.telefono}`, 20, 80);
+  doc.text(`Ciudad: ${c.ciudad}`, 20, 90);
+  doc.text(`Provincia: ${c.provincia}`, 20, 100);
+  doc.text(`Código Postal: ${c.codigoPostal}`, 20, 110);
 
-    //listado de productos con calidad,precio y subtotal
+    //listado de productos con cantidad,precio y subtotal
     let y = 120
     doc.text('Productos',14,y);
 
     this.factura.productos.forEach((item:any, index:number)=>{
       y +=10;
     doc.text(
-      `${index + 1}.${item.producto.nombre} - Cantidad: ${item.Cantidad} - Precio: $${item.producto.precio.toFixed(2)} - Subtotal: $${(item.producto.precio * item.Cantidad).toFixed(2)}`,
+      `${index + 1}.${item.producto.nombre} - Cantidad: ${item.cantidad} - Precio: $${item.producto.precio.toFixed(2)} - Subtotal: $${(item.producto.precio * item.cantidad).toFixed(2)}`,
       20,
       y
       )
     })
     //costos finales
-    doc.text(`Costo de Envio: $${this.factura.envio.toFixed(2)}`, 14,y)
     y +=10;
-    doc.text(`Total a Pagar: $${this.factura.total.toFixed(2)}`, 14,y)
+    doc.text(`Costo de Envio: $${this.factura.envio.toFixed(2)}`, 14,y);
+    y +=10;
+    doc.text(`Total a Pagar: $${this.factura.total.toFixed(2)}`, 14,y);
 
     const pfdBlob = doc.output('blob');
     this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(pfdBlob))

@@ -4,7 +4,7 @@
     <!-- Campos del Formulario -->
     <div class="row g-3 mb-3">
         <div class="col-md-6">
-            <label for="nombre" class="form-label fw-semibold">Nombre <span class="text-danger">*</span></label>
+            <label for="nombre" class="form-label fw-semibold">Nombre y apellido: <span class="text-danger">*</span></label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                 <input id="nombre" formControlName="nombre" class="form-control" placeholder="Tu Nombre Completo">
@@ -29,7 +29,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="correo" class="form-label fw-semibold">Correo Electronico <span
+            <label for="correo" class="form-label fw-semibold">Email <span
                     class="text-danger">*</span></label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <label for="provincia" class="form-label fw-semibold">provincia <span
+                <label for="provincia" class="form-label fw-semibold">Provincia <span
                         class="text-danger">*</span></label>
                 <input id="provincia" formControlName="provincia" class="form-control" placeholder="EJ Buenos aires">
                 <div *ngIf="formularioCompra.get('provincia')?.touched && formularioCompra.get('provincia')?.invalid"

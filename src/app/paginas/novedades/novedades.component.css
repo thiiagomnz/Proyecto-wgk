@@ -1,4 +1,4 @@
-/* Cards Novedades */
+/* Cards generales */
 .card {
   background: linear-gradient(90deg, #b34700 0%, #000000 100%);
   border-radius: 12px;
@@ -9,13 +9,13 @@
   flex-direction: column;
 }
 
-/* Efecto hover */
+/* Efecto hover de la card */
 .card:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 25px rgba(250, 250, 250, 0.6);
 }
 
-/* Texto NUEVO */
+/* Texto NUEVO / etiqueta */
 .card .nuevo-label {
   font-size: 1.1rem;
   font-weight: 800;
@@ -26,7 +26,7 @@
   text-align: center;
 }
 
-/* Imagen */
+/* Imagen de producto */
 .card-img-top {
   width: 100%;
   height: 250px;
@@ -57,7 +57,7 @@
   margin-bottom: 10px;
 }
 
-/* Precio en blanco */
+/* Precio */
 .card-text {
   font-size: 1.2rem;
   font-weight: 700;
@@ -100,6 +100,33 @@
   color: #121212;
 }
 
+/* Talles circulares */
+.talle-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  margin: 0 5px 5px 0;
+  transition: all 0.2s ease;
+}
+
+.talle-circle:hover {
+  background-color: #ffffff;
+  color: #121212;
+}
+
+.talle-circle.selected {
+  background-color: #ffffff;
+  color: #121212;
+  font-weight: bold;
+  transform: scale(1.1);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .card-img-top {
@@ -116,5 +143,10 @@
   }
   .card-text {
     font-size: 0.95rem;
+  }
+  .talle-circle {
+    width: 35px;
+    height: 35px;
+    font-size: 0.85rem;
   }
 }

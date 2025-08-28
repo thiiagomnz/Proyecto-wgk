@@ -1,45 +1,68 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" routerLink="/inicio"><img src="https://images.whatnot.com/eyJidWNrZXQiOiAid2hhdG5vdC1pbWFnZXMiLCAia2V5IjogInVzZXJzLzE2MDc1MzcvNGViY2E1ZmQtMTUxYS00NWE4LWFlMjktYWQ0ODgyNDBjYjlkLmpwZWciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsid2lkdGgiOiAyNTAsICJoZWlnaHQiOiBudWxsLCAiZml0IjogImNvbnRhaW4iLCAiYmFja2dyb3VuZCI6IHsiciI6IDI1NSwgImciOiAyNTUsICJiIjogMjU1LCAiYWxwaGEiOiAxfX19fQ==?signature=addc7dd8079cdb2f7bb76b3388c65426f9ab202c6ce82f75c0fcb5e5de405ec3" alt="" width="100px"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/producto">Producto</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/novedades">Novedades</a>
-          </li>
-           <li class="nav-item">
-            <a class="nav-link" routerLink="/favoritos">Favoritos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/quienesomos">Quienes somos</a>
-          </li>
-                <li class="nav-item">
-            <a class="nav-link" routerLink="/iniciodesesion">Inicio de Sesión</a>
-          </li>
-           <li>
-        </li> 
-           <li class="nav-item">
-            <a class="nav-link" routerLink="/carrito"><i class="fa-solid fa-cart-shopping"></i></a>
-          </li>
-             <li>
-          <a [routerLink]="['/carrito']">
-            <i class="bi bi-cart"></i>
-            <span *ngIf="cantidadProductos >0">
-              ({{cantidadProductos}})
-            </span>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(90deg, #b34700 0%, #000000 100%);">
+  <div class="container-fluid">
+
+    <!-- Logo -->
+    <a class="navbar-brand" routerLink="/inicio">
+      <img src="https://media.canva.com/v2/image-resize/format:PNG/height:225/quality:100/uri:ifs%3A%2F%2FM%2F8f0ca20e-05dc-4b71-b1ad-47dc8442850c/watermark:F/width:225?csig=AAAAAAAAAAAAAAAAAAAAAFW-J9HxohOA9kjau4FkWIzxVtBdTtsybQGqudeVF42S&exp=1756396399&osig=AAAAAAAAAAAAAAAAAAAAAB8sz-JEAP-t_CrphuBVTmdDedv3CBoeACifuT-aFRXM&signer=media-rpc&x-canva-quality=thumbnail_large" 
+           alt="Logo" width="100px">
+    </a>
+
+    <!-- Botón Hamburguesa -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Contenido -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <!-- Links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <!-- Dropdown Producto -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="navbarProducto" role="button" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleDropdown($event)">
+            Producto
           </a>
-        </li> 
-         </ul>
-          <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <ul class="dropdown-menu" aria-labelledby="navbarProducto">
+            <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Jordan 1">Jordan 1</a></li>
+            <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Adidas">Adidas</a></li>
+            <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Jordan 11">Jordan 11</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item todas-item" routerLink="/producto">Todos los productos</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item"><a class="nav-link text-white" routerLink="/novedades">Novedades</a></li>
+        <li class="nav-item"><a class="nav-link text-white" routerLink="/favoritos">Favoritos</a></li>
+        <li class="nav-item"><a class="nav-link text-white" routerLink="/quienesomos">Quiénes somos</a></li>
+      </ul>
+
+      <!-- Buscador + Íconos a la derecha -->
+      <div class="d-flex align-items-center gap-3">
+
+        <!-- Buscador con ícono a la izquierda -->
+        <form class="d-flex align-items-center" role="search">
+          <button class="btn btn-sm text-white p-1 me-2" type="submit" style="background: none; border: none;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <input class="form-control form-control-sm" type="search" placeholder="Buscar" aria-label="Buscar">
         </form>
+
+        <!-- Icono carrito -->
+        <a class="text-white position-relative" routerLink="/carrito">
+          <i class="fa-solid fa-cart-shopping fa-lg"></i>
+          <span *ngIf="cantidadProductos > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{cantidadProductos}}
+          </span>
+        </a>
+
+        <!-- Icono usuario -->
+        <a class="text-white" routerLink="/iniciodesesion">
+          <i class="fa-solid fa-user fa-lg"></i>
+        </a>
+
       </div>
     </div>
-  </nav>
-
+  </div>
+</nav>

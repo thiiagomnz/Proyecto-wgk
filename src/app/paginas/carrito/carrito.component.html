@@ -3,7 +3,7 @@
     <h1>Carrito de Compras</h1>
 
     <div *ngIf="productosEnCarrito.length === 0">
-      <p>No hay productos en el Carrito</p>
+      <p>No hay productos en el carrito</p>
     </div>
 
     <table class="table" *ngIf="productosEnCarrito.length > 0">
@@ -11,6 +11,7 @@
         <tr>
           <th>Imagen</th>
           <th>Nombre</th>
+          <th>Talle</th>
           <th>Precio</th>
           <th>Cantidad</th>
           <th>Acciones</th>
@@ -19,8 +20,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of productosEnCarrito; let i = index">
-          <td><img [src]="item.producto.imagen" alt="{{item.producto.nombre}}" /></td>
+          <td><img [src]="item.producto.imagen" alt="{{ item.producto.nombre }}" /></td>
           <td>{{ item.producto.nombre }}</td>
+          <td>{{ item.talle }}</td>
           <td>${{ item.producto.precio }}</td>
           <td>
             <div class="quantity-buttons">
@@ -30,7 +32,7 @@
             </div>
           </td>
           <td>
-            <button (click)="eliminarProducto(item.producto.id)">Eliminar</button>
+            <button (click)="eliminarProducto(item.producto.id, item.talle)">Eliminar</button>
           </td>
           <td>${{ item.cantidad * item.producto.precio }}</td>
         </tr>

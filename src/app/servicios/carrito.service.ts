@@ -1,59 +1,90 @@
 import { Injectable } from '@angular/core';
-import { Producto } from '../model/producto.model';
 import { BehaviorSubject } from 'rxjs';
+import { Producto } from '../model/producto.model';
+
+export interface ItemCarrito {
+  producto: Producto;
+  talle: number;
+  cantidad: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarritoService {
-  private carritoSubject = new BehaviorSubject<{producto:Producto; cantidad:number}[]>([])
-  carrito$=this.carritoSubject.asObservable()
+  private carrito: ItemCarrito[] = [];
+  private carritoSubject = new BehaviorSubject<ItemCarrito[]>(this.carrito);
+  carrito$ = this.carritoSubject.asObservable();
 
-  agregarAlCarrito(producto:Producto){
-    const productos = this.carritoSubject.getValue();
-    const encontrado = productos.find(p => p.producto.id === producto.id)
+  // Agregar producto + talle al carrito
+  agregarAlCarrito(item: { producto: Producto; talle: number }) {
+    const index = this.carrito.findIndex(
+      p => p.producto.id === item.producto.id && p.talle === item.talle
+    );
 
-    if(encontrado){
-      encontrado.cantidad++
-    }else{
-      this.carritoSubject.next ([...productos, {producto,cantidad :1}])
+    if (index > -1) {
+      this.carrito[index].cantidad++;
+    } else {
+      this.carrito.push({ ...item, cantidad: 1 });
+    }
+
+    this.actualizarCarrito();
+  }
+
+  // Aumentar cantidad
+  aumentarCantidad(productoId: number, talle: number) {
+    const index = this.carrito.findIndex(
+      p => p.producto.id === productoId && p.talle === talle
+    );
+    if (index > -1) {
+      this.carrito[index].cantidad++;
+      this.actualizarCarrito();
     }
   }
 
-  eliminarDelCarrito(productoId: number){
-    const productos = this.carritoSubject.getValue().filter(p => p.producto.id !== productoId)
-    this.carritoSubject.next(productos)
+  // Disminuir cantidad
+  disminuirCantidad(productoId: number, talle: number) {
+    const index = this.carrito.findIndex(
+      p => p.producto.id === productoId && p.talle === talle
+    );
+    if (index > -1 && this.carrito[index].cantidad > 1) {
+      this.carrito[index].cantidad--;
+    } else {
+      this.eliminarDelCarrito(productoId, talle);
+      return;
+    }
+    this.actualizarCarrito();
   }
 
-  vaciarCarrito(){
-    this.carritoSubject.next([])
+  // Eliminar producto + talle específico
+  eliminarDelCarrito(productoId: number, talle: number) {
+    this.carrito = this.carrito.filter(
+      p => !(p.producto.id === productoId && p.talle === talle)
+    );
+    this.actualizarCarrito();
   }
 
-  //metodo para actualizar la cantidad de un producto en el carrito 
-  actualizarCantidad(productoId:number, nuevaCantidad:number){
-    //recorremos el carrrito y actualizamos la cantidad del producto con el ID dado
-    const productos = this.carritoSubject.getValue().map(item =>{
-      if(item.producto.id === productoId){
-        //retornamos una copia del producto con la nueva cantidad
-        return{... item,cantidad: nuevaCantidad}
-      }
-      return item
-    })
-    //emitimos el nuevo estado del carrito
-    this.carritoSubject.next(productos)
+  // Vaciar carrito
+  vaciarCarrito() {
+    this.carrito = [];
+    this.actualizarCarrito();
   }
 
-  //metodo para obtener los productos del carrito como un arreglo
-  obtenerProductos(): {producto: Producto; cantidad: number}[]{
-    return this.carritoSubject.getValue();
+  // Obtener subtotal de todos los productos
+  obtenerTotal(): number {
+    return this.carrito.reduce(
+      (total, item) => total + item.producto.precio * item.cantidad,
+      0
+    );
   }
 
-  //metodo para calcular el total a pagar (precio * cantidad de cada producto)
-  obtenerTotal():number{
-    const productos = this.carritoSubject.getValue();
-    //usamos reduce para sumar los subtotales de cada producto
-    return productos.reduce((total, item) => total + item.producto.precio * item.cantidad,0)
+  // Obtener copia de productos en el carrito
+  obtenerProductos(): ItemCarrito[] {
+    return [...this.carrito];
   }
 
-  constructor() { }
+  // 🔹 Mantener subject actualizado
+  private actualizarCarrito() {
+    this.carritoSubject.next([...this.carrito]);
+  }
 }

@@ -6,4 +6,7 @@ export interface Producto{
     disponible: boolean;
     cantidad?: number;
     marca: string;
+    talles?: number[];
+    talle?: number;
+    tallesDisponibles: number[];
 }
