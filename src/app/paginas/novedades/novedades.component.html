@@ -26,7 +26,7 @@
             <div 
               *ngFor="let talle of producto.tallesDisponibles" 
               class="talle-circle me-2 mb-2"
-              [class.selected]="tallesSeleccionados[producto.id]?.includes(talle)"
+             [class.selected]="(tallesSeleccionados[producto.id] || []).includes(talle)"
               (click)="seleccionarTalle(producto.id, talle)"
             >
               {{ talle }}

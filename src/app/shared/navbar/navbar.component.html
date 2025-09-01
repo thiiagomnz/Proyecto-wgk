@@ -3,7 +3,7 @@
 
     <!-- Logo -->
     <a class="navbar-brand" routerLink="/inicio">
-      <img src="https://media.canva.com/v2/image-resize/format:PNG/height:225/quality:100/uri:ifs%3A%2F%2FM%2F8f0ca20e-05dc-4b71-b1ad-47dc8442850c/watermark:F/width:225?csig=AAAAAAAAAAAAAAAAAAAAAFW-J9HxohOA9kjau4FkWIzxVtBdTtsybQGqudeVF42S&exp=1756396399&osig=AAAAAAAAAAAAAAAAAAAAAB8sz-JEAP-t_CrphuBVTmdDedv3CBoeACifuT-aFRXM&signer=media-rpc&x-canva-quality=thumbnail_large" 
+      <img src="https://media.canva.com/v2/image-resize/format:PNG/height:225/quality:100/uri:ifs%3A%2F%2FM%2F8f0ca20e-05dc-4b71-b1ad-47dc8442850c/watermark:F/width:225?csig=AAAAAAAAAAAAAAAAAAAAALgsejBEoDQkfXnbv4Vc9QKn-vyQOpK9LfQucxE6tw_9&exp=1756435999&osig=AAAAAAAAAAAAAAAAAAAAAMgEagFY0CJ_orOunGkmRL4wqatA8nK9PfMoEpwQLnQJ&signer=media-rpc&x-canva-quality=thumbnail_large" 
            alt="Logo" width="100px">
     </a>
 
@@ -27,7 +27,10 @@
           <ul class="dropdown-menu" aria-labelledby="navbarProducto">
             <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Jordan 1">Jordan 1</a></li>
             <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Adidas">Adidas</a></li>
-            <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Jordan 11">Jordan 11</a></li>
+            <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Jordan Retro 11">Jordan Retro 11</a></li>
+            <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Jordan Retro 4">Jordan Retro 4</a></li>
+            <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Jordan Retro 3">Jordan Retro 3</a></li>
+            <li><a class="dropdown-item marca-item" routerLink="/producto/marca/Artistas">Artistas</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item todas-item" routerLink="/producto">Todos los productos</a></li>
           </ul>
@@ -42,12 +45,13 @@
       <div class="d-flex align-items-center gap-3">
 
         <!-- Buscador con ícono a la izquierda -->
-        <form class="d-flex align-items-center" role="search">
-          <button class="btn btn-sm text-white p-1 me-2" type="submit" style="background: none; border: none;">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-          <input class="form-control form-control-sm" type="search" placeholder="Buscar" aria-label="Buscar">
-        </form>
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-dark border-0 text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" class="form-control bg-dark text-white border-0"
+                 placeholder="Buscar"
+                 [(ngModel)]="busqueda"
+                 (input)="onBuscar()">
+        </div>
 
         <!-- Icono carrito -->
         <a class="text-white position-relative" routerLink="/carrito">
