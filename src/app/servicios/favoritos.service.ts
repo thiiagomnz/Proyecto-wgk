@@ -1,32 +1,115 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Producto } from '../model/producto.model';
+
+export interface FavoritoItem {
+  id_producto: number;      // ID en BD
+  producto: Producto;       // Producto completo
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class FavoritosService {
-  private favoritoSubject = new BehaviorSubject<{producto:Producto}[]>([])
-  favorito$=this.favoritoSubject.asObservable()
 
-    agregarAFavoritos(producto:Producto){
-      const productos = this.favoritoSubject.getValue();
-      const encontrado = productos.find(p => p.producto.id === producto.id)
+  // URL BASE de tu API
+  private apiUrl = 'http://localhost/api_proyecto/public/favoritos';
 
-      if (encontrado){
-      encontrado
-    }else{
-      this.favoritoSubject.next ([...productos, {producto}])
-    }
-    }
+  // Estado interno con BehaviorSubject
+  private favoritoSubject = new BehaviorSubject<FavoritoItem[]>([]);
+  favorito$ = this.favoritoSubject.asObservable();
 
-    eliminarDeFavoritos(productoId: number){
-      const productos = this.favoritoSubject.getValue().filter(p => p.producto.id !== productoId)
-      this.favoritoSubject.next(productos)
-    }
+  constructor(private http: HttpClient) {}
 
-    vaciarCarrito(){
-      this.favoritoSubject.next([])
-    }
-  constructor() { }
+  // ---------------------------------------------------------
+  // Headers con token del usuario
+  // ---------------------------------------------------------
+  private getAuthHeaders(): HttpHeaders {
+    const token = (typeof localStorage !== 'undefined')
+      ? localStorage.getItem('token') || ''
+      : '';
+
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+  // =============================================================
+  // OBTENER FAVORITOS DEL BACKEND
+  // GET /favoritos
+  // =============================================================
+  obtenerFavoritos(): Observable<any> {
+    return this.http.get(
+      this.apiUrl,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // Cargar favoritos al iniciar la app
+  cargarFavoritos() {
+    this.obtenerFavoritos().subscribe({
+      next: (items: any[]) => {
+        this.favoritoSubject.next(items);
+      },
+      error: () => {
+        this.favoritoSubject.next([]);
+      }
+    });
+  }
+
+  // =============================================================
+  // AGREGAR FAVORITO
+  // POST /favoritos/agregar
+  // Body: { id_producto }
+  // =============================================================
+  agregarAFavoritos(producto: Producto): Observable<any> {
+    const body = { id_producto: producto.id };
+
+    return this.http.post(
+      `${this.apiUrl}/agregar`,
+      body,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      tap((response: any) => {
+        if (response?.favoritos) {
+          this.favoritoSubject.next(response.favoritos);
+        }
+      })
+    );
+  }
+
+  // =============================================================
+  // ELIMINAR FAVORITO
+  // DELETE /favoritos/eliminar/:idProducto
+  // =============================================================
+  eliminarDeFavoritos(idProducto: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/eliminar/${idProducto}`,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      tap((response: any) => {
+        if (response?.favoritos) {
+          this.favoritoSubject.next(response.favoritos);
+        }
+      })
+    );
+  }
+
+  // =============================================================
+  // VACIAR FAVORITOS
+  // DELETE /favoritos/vaciar
+  // (si tu backend no lo tiene, decímelo y lo creo)
+  // =============================================================
+  vaciarFavoritos(): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/vaciar`,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      tap(() => {
+        this.favoritoSubject.next([]);
+      })
+    );
+  }
 }

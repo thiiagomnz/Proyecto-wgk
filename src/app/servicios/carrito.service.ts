@@ -1,90 +1,147 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Producto } from '../model/producto.model';
 
 export interface ItemCarrito {
+  id_detalle?: number;      // ID en la BD
   producto: Producto;
   talle: number;
   cantidad: number;
+  precio_unitario?: number;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarritoService {
-  private carrito: ItemCarrito[] = [];
-  private carritoSubject = new BehaviorSubject<ItemCarrito[]>(this.carrito);
+
+  // ✔ URL de tu backend
+  private apiUrl = 'http://localhost/api_proyecto/public/carrito';
+
+  private carritoSubject = new BehaviorSubject<ItemCarrito[]>([]);
   carrito$ = this.carritoSubject.asObservable();
 
-  // Agregar producto + talle al carrito
-  agregarAlCarrito(item: { producto: Producto; talle: number }) {
-    const index = this.carrito.findIndex(
-      p => p.producto.id === item.producto.id && p.talle === item.talle
-    );
+  constructor(private http: HttpClient) {}
 
-    if (index > -1) {
-      this.carrito[index].cantidad++;
-    } else {
-      this.carrito.push({ ...item, cantidad: 1 });
+  // ------------------------------------------
+  // Headers con token
+  // ------------------------------------------
+  private getHeaders() {
+    const token = localStorage.getItem('token') ?? '';
+
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+  }
+
+  // ================================================================
+  // OBTENER CARRITO DESDE EL BACKEND
+  // ================================================================
+  obtenerCarrito(): Observable<ItemCarrito[]> {
+    return this.http.get<ItemCarrito[]>(this.apiUrl, this.getHeaders());
+  }
+
+  cargarCarrito() {
+    this.obtenerCarrito().subscribe({
+      next: (items) => this.carritoSubject.next(items),
+      error: () => this.carritoSubject.next([])
+    });
+  }
+
+  setCarrito(items: ItemCarrito[]) {
+    this.carritoSubject.next(items);
+  }
+
+  // ================================================================
+  // AGREGAR AL CARRITO (con talle)
+  // ================================================================
+  agregarAlCarrito(item: { producto: Producto; talle: number }): Observable<any> {
+
+    const body = {
+      id_producto: item.producto.id,
+      talle: item.talle,
+      cantidad: 1,
+      precio_unitario: item.producto.precio
+    };
+
+    return this.http.post<any>(
+      `${this.apiUrl}/agregar`,
+      body,
+      this.getHeaders()
+    ).pipe(
+      tap((r: any) => {
+        if (r?.carrito) this.carritoSubject.next(r.carrito);
+      })
+    );
+  }
+
+  // ================================================================
+  // AUMENTAR / DISMINUIR CANTIDAD
+  // ================================================================
+  actualizarCantidad(idDetalleCarrito: number, cantidad: number): Observable<any> {
+
+    return this.http.put<any>(
+      `${this.apiUrl}/actualizar/${idDetalleCarrito}`,
+      { cantidad },
+      this.getHeaders()
+    ).pipe(
+      tap((r: any) => {
+        if (r?.carrito) this.carritoSubject.next(r.carrito);
+      })
+    );
+  }
+
+  aumentarCantidad(item: ItemCarrito) {
+    return this.actualizarCantidad(item.id_detalle!, item.cantidad + 1);
+  }
+
+  disminuirCantidad(item: ItemCarrito) {
+    if (item.cantidad <= 1) {
+      return this.eliminarProducto(item.id_detalle!);
     }
-
-    this.actualizarCarrito();
+    return this.actualizarCantidad(item.id_detalle!, item.cantidad - 1);
   }
 
-  // Aumentar cantidad
-  aumentarCantidad(productoId: number, talle: number) {
-    const index = this.carrito.findIndex(
-      p => p.producto.id === productoId && p.talle === talle
+  // ================================================================
+  // ELIMINAR UN ITEM DEL CARRITO
+  // ================================================================
+  eliminarProducto(idDetalleCarrito: number): Observable<any> {
+
+    return this.http.delete<any>(
+      `${this.apiUrl}/eliminar/${idDetalleCarrito}`,
+      this.getHeaders()
+    ).pipe(
+      tap((r: any) => {
+        if (r?.carrito) this.carritoSubject.next(r.carrito);
+      })
     );
-    if (index > -1) {
-      this.carrito[index].cantidad++;
-      this.actualizarCarrito();
-    }
   }
 
-  // Disminuir cantidad
-  disminuirCantidad(productoId: number, talle: number) {
-    const index = this.carrito.findIndex(
-      p => p.producto.id === productoId && p.talle === talle
+  // ================================================================
+  // VACIAR TODO EL CARRITO
+  // ================================================================
+  vaciarCarrito(): Observable<any> {
+
+    return this.http.delete<any>(
+      `${this.apiUrl}/vaciar`,
+      this.getHeaders()
+    ).pipe(
+      tap(() => this.carritoSubject.next([]))
     );
-    if (index > -1 && this.carrito[index].cantidad > 1) {
-      this.carrito[index].cantidad--;
-    } else {
-      this.eliminarDelCarrito(productoId, talle);
-      return;
-    }
-    this.actualizarCarrito();
   }
 
-  // Eliminar producto + talle específico
-  eliminarDelCarrito(productoId: number, talle: number) {
-    this.carrito = this.carrito.filter(
-      p => !(p.producto.id === productoId && p.talle === talle)
-    );
-    this.actualizarCarrito();
-  }
-
-  // Vaciar carrito
-  vaciarCarrito() {
-    this.carrito = [];
-    this.actualizarCarrito();
-  }
-
-  // Obtener subtotal de todos los productos
+  // ================================================================
+  // TOTAL DEL CARRITO
+  // ================================================================
   obtenerTotal(): number {
-    return this.carrito.reduce(
-      (total, item) => total + item.producto.precio * item.cantidad,
+    const carrito = this.carritoSubject.value;
+    return carrito.reduce(
+      (total, item) => total + (item.precio_unitario ?? item.producto.precio) * item.cantidad,
       0
     );
-  }
-
-  // Obtener copia de productos en el carrito
-  obtenerProductos(): ItemCarrito[] {
-    return [...this.carrito];
-  }
-
-  // 🔹 Mantener subject actualizado
-  private actualizarCarrito() {
-    this.carritoSubject.next([...this.carrito]);
   }
 }
