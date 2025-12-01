@@ -41,7 +41,7 @@
         <li class="nav-item"><a class="nav-link text-white" routerLink="/quienesomos">Quiénes somos</a></li>
       </ul>
 
-      <!-- Buscador + Íconos a la derecha -->
+      <!-- DERECHA -->
       <div class="d-flex align-items-center gap-3">
 
         <!-- Buscador con ícono a la izquierda -->
@@ -61,10 +61,31 @@
           </span>
         </a>
 
-        <!-- Icono usuario -->
-        <a class="text-white" routerLink="/iniciodesesion">
-          <i class="fa-solid fa-user fa-lg"></i>
-        </a>
+        <!-- SI ESTÁ LOGUEADO -->
+        <ng-container *ngIf="authService.isLoggedIn(); else sinSesion">
+
+          <!-- Botón con nombre de usuario -->
+          <div class="dropdown">
+            <a class="text-white dropdown-toggle" role="button" data-bs-toggle="dropdown">
+              <i class="fa-solid fa-user fa-lg"></i> {{ usuario?.nombre  || usuario?.nombreUsuario }}
+            </a>
+            
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" routerLink="/perfil">Mi perfil</a></li>
+              <li><a class="dropdown-item" routerLink="/compras">Mis compras</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</button></li>
+            </ul>
+          </div>
+
+        </ng-container>
+
+        <!-- SI NO ESTÁ LOGUEADO -->
+        <ng-template #sinSesion>
+          <a class="text-white" routerLink="/iniciodesesion">
+            <i class="fa-solid fa-user fa-lg"></i>
+          </a>
+        </ng-template>
 
       </div>
     </div>

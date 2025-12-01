@@ -16,33 +16,7 @@ import { FavoritosService } from '../../servicios/favoritos.service';
 export class NovedadesComponent {
 
   novedades: Producto[] = [
-    {
-      id: 10,
-      nombre: 'Air Jordan 4 Retro White Thunder',
-      precio: 300,
-      imagen: 'https://wegotkickspr.com/cdn/shop/files/1_e56c737f-c496-4a06-9a0c-b3d42824c7d7.jpg?v=1721769906&width=600',
-      disponible: true,
-      marca: 'Jordan 4',
-      tallesDisponibles: [38, 39, 40, 41]
-    },
-    {
-      id: 11,
-      nombre: 'Air Jordan 1 Retro High OG Stage Haze',
-      precio: 150,
-      imagen: 'https://wegotkickspr.com/cdn/shop/files/1f7d4890632fc62abee07c5d149bdc99.jpg?v=1737598814&width=1100',
-      disponible: true,
-      marca: 'Jordan 1',
-      tallesDisponibles: [38, 39, 40, 41]
-    },
-    {
-      id: 12,
-      nombre: 'Air Jordan 4 Retro Military Blue 2024',
-      precio: 250,
-      imagen: 'https://wegotkickspr.com/cdn/shop/files/Military.jpg?v=1715050398&width=600',
-      disponible: true,
-      marca: 'Jordan 4',
-      tallesDisponibles: [38, 39, 40, 41]
-    }
+   
   ];
 
   // Guardar talles seleccionados por producto

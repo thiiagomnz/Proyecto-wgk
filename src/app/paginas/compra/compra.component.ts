@@ -1,47 +1,47 @@
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CarritoService } from '../../servicios/carrito.service';
+import { CompraService } from '../../servicios/compra.service';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import jsPDF from 'jspdf';
-import { CarritoService } from '../../servicios/carrito.service';
 
 @Component({
   selector: 'app-compra',
-  imports: [CommonModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './compra.component.html',
-  styleUrl: './compra.component.css'
+  styleUrls: ['./compra.component.css']
 })
 export class CompraComponent implements OnInit {
-  // declaración del formulario reactivo para la compra
+
+  productos: any[] = [];
+  datos = { direccion: '', telefono: '' };
+  subtotal = 0;
+  envio = 1000; 
+  total = 0;
+  mensaje = '';
+  cargando = false;
+
+  // Para factura/PDF
   formularioCompra!: FormGroup;
-
-  // variable para almacenar el total de la compra (subtotal + envío)
-  total!: number;
-
-  // costo fijo de envío
-  envio = 30;
-
-  // indicador para saber si la factura ya fue generada 
   facturaGenerada = false;
-
-  // objeto que contiene la información de la factura generada
   factura: any;
-
-  // controla la visibilidad del modal que muestra el PDF
   mostrarModal = false;
-
-  // fuente segura para mostrar el PDF generado en el iframe (URL sanitizada)
   pdfSrc: SafeResourceUrl | undefined;
 
   constructor(
-    private fb: FormBuilder, // FormBuilder para crear el formulario reactivo
-    private carritoService: CarritoService, // servicio para manejar el carrito y obtener productos y total
-    private sanitizer: DomSanitizer, // para sanitizar la URL del PDF y que Angular lo permita mostrar
+    private carritoService: CarritoService,
+    private compraService: CompraService,
+    private router: Router,
+    private fb: FormBuilder,
+    private sanitizer: DomSanitizer
   ) {}
 
-  // método que se ejecuta al inicializar el componente
   ngOnInit(): void {
-    // formulario con los campos requeridos y validadores
+    // Formulario reactivo para datos de la compra
     this.formularioCompra = this.fb.group({
       nombre: ['', Validators.required],
       direccion: ['', Validators.required],
@@ -52,59 +52,92 @@ export class CompraComponent implements OnInit {
       provincia: ['', Validators.required],
       metodoPago: ['', Validators.required]
     });
+
+    // Suscripción al carrito
+    this.carritoService.carrito$.subscribe(items => {
+      this.productos = items;
+      this.calcularTotales();
+    });
   }
 
-  // calcular el total de la compra sumando el subtotal y el costo de envío
-  calcularTotal(): number {
-    const subtotal = this.carritoService.obtenerTotal(); // obtiene subtotal del carrito
-    this.total = subtotal + this.envio;
-    return this.total;
+  // Calcula subtotal y total
+  calcularTotales() {
+    this.subtotal = this.productos.reduce((acc, p) => {
+      const precio = Number(p.precio_unitario) || p.producto?.precio || 0;
+      const cantidad = Number(p.cantidad) || 1;
+      return acc + (precio * cantidad);
+    }, 0);
+
+    this.total = this.subtotal + this.envio;
   }
 
-  // prepara los datos para la factura con cliente, productos, totales y fecha
+  // Finalizar compra estilo "ellos"
+  finalizarCompra() {
+    if (this.productos.length === 0) {
+      this.mensaje = 'El carrito está vacío';
+      return;
+    }
+
+    const data = {
+      direccion: this.datos.direccion,
+      telefono: this.datos.telefono
+    };
+
+    this.cargando = true;
+
+    this.compraService.finalizarCompra(data).subscribe({
+      next: res => {
+        this.mensaje = 'Compra realizada con éxito';
+        // Vaciar carrito
+        this.carritoService.vaciarCarrito().subscribe();
+
+        // Generar factura PDF opcional
+        if (this.formularioCompra.valid) {
+          this.emitirFactura();
+          this.generarPDFModal();
+        }
+
+        // Redirigir al ticket
+        setTimeout(() => {
+          this.router.navigate(['/ticket', res.id_compra]);
+        }, 1000);
+      },
+      error: err => {
+        console.error(err);
+        this.mensaje = 'Error al procesar compra.';
+        this.cargando = false;
+      }
+    });
+  }
+
+  // ----------------- FUNCIONES DE FACTURA / PDF -----------------
+  calcularTotalFactura(): number {
+    return this.subtotal + this.envio;
+  }
+
   emitirFactura(): void {
-    const datosCliente = this.formularioCompra.value; // datos ingresados en el formulario
-    const productos = this.carritoService.obtenerProductos(); // productos del carrito
-    const totalFinal = this.calcularTotal(); // total calculado con envío
-
-    // construye el objeto factura con toda la info necesaria
+    const datosCliente = this.formularioCompra.value;
+    const totalFinal = this.calcularTotalFactura();
     this.factura = {
       cliente: datosCliente,
-      productos: productos,
+      productos: this.productos,
       envio: this.envio,
       total: totalFinal,
       fecha: new Date()
     };
-    // marca que la factura fue generada 
     this.facturaGenerada = true;
   }
 
-  // método que se ejecuta al finalizar la compra (click en botón)
-  finalizarCompra(): void {
-    if (this.formularioCompra.valid) {
-      this.emitirFactura(); // crea la factura
-      this.generarPDFModal(); // genera y muestra el PDF en modal
-    } else {
-      this.formularioCompra.markAllAsTouched(); // marca todos los campos como tocados para mostrar errores
-    }
-  }
-
-  // genera el PDF con jsPDF y crea la URL para mostrar en iframe dentro del modal
   generarPDFModal(): void {
-    if (!this.factura) return; // si no hay factura, no hacer nada
-
-    const doc = new jsPDF(); // crea instancia de jsPDF
-
-    // agrega título y fecha al PDF
+    if (!this.factura) return;
+    const doc = new jsPDF();
     doc.setFontSize(18);
     doc.text('Factura de compra', 14, 20);
-
     doc.setFontSize(12);
     doc.text(`Fecha: ${this.factura.fecha.toLocaleString()}`, 14, 30);
 
-    // información del cliente
-    doc.text('Cliente:', 14, 40);
     const c = this.factura.cliente;
+    doc.text('Cliente:', 14, 40);
     doc.text(`Nombre: ${c.nombre}`, 20, 50);
     doc.text(`Dirección: ${c.direccion}`, 20, 60);
     doc.text(`Correo: ${c.correo}`, 20, 70);
@@ -113,10 +146,8 @@ export class CompraComponent implements OnInit {
     doc.text(`Provincia: ${c.provincia}`, 20, 100);
     doc.text(`Código Postal: ${c.codigoPostal}`, 20, 110);
 
-    // listado de productos con cantidad, precio y subtotal
     let y = 120;
     doc.text('Productos', 14, y);
-
     this.factura.productos.forEach((item: any, index: number) => {
       y += 10;
       doc.text(
@@ -126,7 +157,6 @@ export class CompraComponent implements OnInit {
       );
     });
 
-    // costos finales
     y += 10;
     doc.text(`Costo de Envío: $${this.factura.envio.toFixed(2)}`, 14, y);
     y += 10;
@@ -134,12 +164,9 @@ export class CompraComponent implements OnInit {
 
     const pdfBlob = doc.output('blob');
     this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(pdfBlob));
-
-    // abre el modal que contiene el PDF
     this.mostrarModal = true;
   }
 
-  // método para cerrar el modal y liberar la URL del PDF
   cerrarModal(): void {
     this.mostrarModal = false;
     if (this.pdfSrc) {
@@ -148,7 +175,6 @@ export class CompraComponent implements OnInit {
     }
   }
 
-  // método para imprimir el PDF que está cargado dentro del iframe
   imprimirPDF(): void {
     const iframe: HTMLIFrameElement | null = document.getElementById('pdfFrame') as HTMLIFrameElement;
     if (iframe && iframe.contentWindow) {
@@ -157,12 +183,9 @@ export class CompraComponent implements OnInit {
     }
   }
 
-  // 🟩 NUEVO MÉTODO: copiar alias o número al portapapeles
   copiarTexto(texto: string): void {
     navigator.clipboard.writeText(texto).then(() => {
       alert(`"${texto}" copiado al portapapeles`);
-    }).catch(() => {
-      alert('No se pudo copiar el texto.');
-    });
+    }).catch(() => alert('No se pudo copiar el texto.'));
   }
 }

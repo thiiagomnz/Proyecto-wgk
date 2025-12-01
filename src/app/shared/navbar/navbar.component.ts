@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Necesario para ngModel
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CarritoService } from '../../servicios/carrito.service';
 import { Producto } from '../../model/producto.model';
 import { BuscadorService } from '../../servicios/buscador.service';
+import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,34 +15,66 @@ import { BuscadorService } from '../../servicios/buscador.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+
   cantidadProductos: number = 0;
-  busqueda: string = ''; // Texto del buscador
+  busqueda: string = '';
   marcas: string[] = ['Todas', 'Jordan', 'Adidas', 'Nike'];
+
+  // Usuario logueado
+  usuario: any = null;
 
   constructor(
     private carritoService: CarritoService,
-    public buscadorService: BuscadorService
+    public buscadorService: BuscadorService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    // Contar cantidad de productos en el carrito
-    this.carritoService.carrito$.subscribe((productos: { producto: Producto; cantidad: number }[]) => {
-      this.cantidadProductos = productos.reduce((total, item) => total + item.cantidad, 0);
+
+    /** 1) Cargar usuario desde auth **/
+    this.usuario = this.authService.getUsuario();
+
+    /** 2) Si está logueado → cargar carrito **/
+    if (this.authService.isLoggedIn()) {
+      this.carritoService.cargarCarrito();
+    }
+
+    /** 3) Escuchar cambios del carrito **/
+    this.carritoService.carrito$.subscribe(productos => {
+      this.cantidadProductos = productos.reduce(
+        (total, item) => total + Number(item.cantidad || 1),
+        0
+      );
     });
 
-    // Mantener sincronizado el buscador si cambia desde otro componente
+    /** 4) Si se loguea después → actualizar usuario + carrito **/
+    if (this.authService.loginEvent) {
+      this.authService.loginEvent.subscribe(() => {
+        this.usuario = this.authService.getUsuario();
+        this.carritoService.cargarCarrito();
+      });
+    }
+
+    /** 5) Buscador sincronizado **/
     this.buscadorService.busqueda$.subscribe(texto => {
       this.busqueda = texto;
     });
   }
 
-  // Evita que el dropdown de "Producto" recargue la página
+  /** Actualiza el buscador **/
+  onBuscar() {
+    this.buscadorService.setBusqueda(this.busqueda);
+  }
+
+  /** Evitar reload del dropdown **/
   toggleDropdown(event: Event) {
     event.preventDefault();
   }
 
-  // Actualiza la búsqueda en el servicio cada vez que el usuario escribe
-  onBuscar() {
-    this.buscadorService.setBusqueda(this.busqueda);
+  /** Logout **/
+  logout() {
+    this.authService.logout();
+    this.usuario = null;
+    this.cantidadProductos = 0;
   }
 }

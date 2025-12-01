@@ -9,4 +9,5 @@ export interface Producto{
     talles?: number[];
     talle?: number;
     tallesDisponibles: number[];
+     stock: number;            // agregado
 }

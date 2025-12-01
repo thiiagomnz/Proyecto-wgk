@@ -109,17 +109,17 @@ export class CarritoService {
   // ================================================================
   // ELIMINAR UN ITEM DEL CARRITO
   // ================================================================
-  eliminarProducto(idDetalleCarrito: number): Observable<any> {
+ eliminarProducto(idDetalleCarrito: number, talle?: number): Observable<any> {
+  // Si tu API no acepta talle, puedes enviarlo como query
+  const url = `${this.apiUrl}/eliminar/${idDetalleCarrito}?talle=${talle}`;
 
-    return this.http.delete<any>(
-      `${this.apiUrl}/eliminar/${idDetalleCarrito}`,
-      this.getHeaders()
-    ).pipe(
-      tap((r: any) => {
-        if (r?.carrito) this.carritoSubject.next(r.carrito);
-      })
-    );
-  }
+  return this.http.delete<any>(url, this.getHeaders()).pipe(
+    tap((r: any) => {
+      if (r?.carrito) this.carritoSubject.next(r.carrito);
+    })
+  );
+}
+
 
   // ================================================================
   // VACIAR TODO EL CARRITO

@@ -26,7 +26,7 @@ export class FavoritosComponent implements OnInit{
   }
 
   vaciarFavoritos(){
-    this.favoritosService.vaciarCarrito()
+    this.favoritosService.vaciarFavoritos()
   }
 
    realizarCompra(){
