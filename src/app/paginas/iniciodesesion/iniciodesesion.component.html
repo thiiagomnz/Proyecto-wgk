@@ -1,29 +1,47 @@
 <div class="card-container">
-    <div class="card-box">
-        <h2>Iniciar Sesión</h2>
+  <div class="card-box">
+    <h2>Iniciar Sesión</h2>
 
-        <form (submit)="onLogin()" class="card-form">
-        <div class="input-group">
-            <label for="username">Email</label>
-            <input type="text" id="username" name="username" required placeholder="Introduce tu Email"/>
-        </div>
+    <!-- Usamos ngSubmit en lugar de submit para que Angular maneje preventDefault automáticamente -->
+    <form (ngSubmit)="onLogin()" class="card-form">
+      
+      <div class="input-group">
+        <label for="email">Email</label>
+        <!-- El name debe coincidir con la propiedad que usamos en TS -->
+        <input
+          type="text"
+          id="email"
+          name="email"
+          [(ngModel)]="usuario.email"
+          required
+          placeholder="Introduce tu Email"
+        />
+      </div>
 
-        <div class="input-group">
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" required placeholder="Introduce tu contraseña"/>
-        </div>
-        
-        <button type="submit" class="card-btn">Iniciar Sesión</button>
+      <div class="input-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="usuario.password"
+          required
+          placeholder="Introduce tu contraseña"
+        />
+      </div>
+      
+      <button type="submit" class="card-btn">Iniciar Sesión</button>
 
-        <p class="or-text">ó</p>
+      <p class="or-text">ó</p>
 
-        <button type="button" class="card-btn google-btn">
-            <i class="fa fa-google"></i>Iniciar Sesión con Google
-        </button>
+      <button type="button" class="card-btn google-btn">
+        <i class="fa fa-google"></i> Iniciar Sesión con Google
+      </button>
 
-        <div class="signup-text">
-            <p>¿No tienes cuenta? <a href="/registro">Registrate aqui</a></p>
-        </div>
-        </form>
-    </div>
+      <div class="signup-text">
+        <p>¿No tienes cuenta? <a routerLink="/registro">Registrate aquí</a></p>
+      </div>
+      
+    </form>
+  </div>
 </div>

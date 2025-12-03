@@ -1,52 +1,59 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
 
-  // Datos del usuario enlazados al formulario
+  // Objeto que contiene los datos del nuevo usuario.
+  // Se enlaza al formulario mediante ngModel en la plantilla.
   nuevoUsuario = {
     nombre: '',
     email: '',
     password: ''
   };
 
-  // Mensaje de error para mostrar en la vista
+  // Texto para mostrar mensajes de error en pantalla.
   error: string = '';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  // Se inyecta el servicio de autenticación para poder registrar usuarios
+  // y el Router para redirigir al terminar el registro.
+  constructor(private authService: AuthService, private router: Router) {}
 
-  // Método llamado cuando el usuario envía el formulario
+  // Método disparado al enviar el formulario.
   onRegister(): void {
 
-    // Validar campos vacíos
+    // Validación inicial: ningún campo puede estar vacío.
     if (!this.nuevoUsuario.nombre || !this.nuevoUsuario.email || !this.nuevoUsuario.password) {
       this.error = 'Todos los campos son obligatorios.';
       return;
     }
 
-    // Llamada al backend usando AuthService
+    // Llamada al backend a través del servicio de autenticación.
     this.authService.register(this.nuevoUsuario).subscribe({
 
+      // Si el registro es exitoso:
       next: () => {
+        // Alerta rápida; puede reemplazarse por un toast más elegante.
         alert('Registro exitoso. Ahora puede iniciar sesión.');
+
+        // Redirige al usuario a la pantalla de login.
         this.router.navigate(['/inicio-sesion']);
       },
 
+      // Si ocurre un error en el backend o en la red:
       error: (err) => {
-        console.error('Error al registrar el usuario', err);
+        console.error('Error en el registro', err);
+
+        // Mensaje para mostrar en la interfaz.
         this.error = 'Error al registrar el usuario.';
       }
     });

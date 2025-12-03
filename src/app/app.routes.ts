@@ -31,6 +31,14 @@ export const routes: Routes = [
     component: AdminComponent,
     canActivate: [AdminGuard]
   },
+   // Auth: inicio de sesión
+  // -----------------------------------------------------------
+  { path: 'login', component: IniciodesesionComponent },
+
+  // -----------------------------------------------------------
+  // Auth: registro de usuario
+  // -----------------------------------------------------------
+  { path: 'register', component: RegistroComponent },
    // -----------------------------------------------------------
   // Página del ticket generado tras comprar
   // Se usa loadComponent() → lazy loading del componente

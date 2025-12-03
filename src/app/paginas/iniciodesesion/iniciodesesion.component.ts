@@ -13,13 +13,11 @@ import { AuthService } from '../../servicios/auth.service';
 })
 export class IniciodesesionComponent {
 
-  // Datos del usuario para el formulario
   usuario = {
     email: '',
     password: ''
   };
 
-  // Mensaje de error para mostrar en pantalla
   error: string = '';
 
   constructor(
@@ -27,21 +25,25 @@ export class IniciodesesionComponent {
     private router: Router
   ) {}
 
-  // Método que se ejecuta al enviar el formulario
   onLogin(): void {
+    console.log('onLogin ejecutado'); // ✅ Verifica que se dispare
 
-    // Validación básica
     if (!this.usuario.email || !this.usuario.password) {
       this.error = 'Complete todos los campos.';
       return;
     }
 
-    // Llamo al servicio de login
     this.authService.login(this.usuario).subscribe({
       next: (res) => {
+        console.log('Respuesta backend:', res); // ✅ Verifica que llega JSON
         this.error = '';
-        alert('Inicio de sesión exitoso');
-        this.router.navigate(['/productos']); // Redirección post login
+
+        if (res?.token) {
+          alert('Inicio de sesión exitoso');
+          this.router.navigate(['/productos']);
+        } else {
+          this.error = 'No se recibió token del servidor.';
+        }
       },
       error: (err) => {
         console.error('Error al iniciar sesión', err);
