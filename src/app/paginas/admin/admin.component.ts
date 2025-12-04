@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ProductService } from '../../servicios/productos.service';
 
-
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -13,50 +12,43 @@ import { ProductService } from '../../servicios/productos.service';
 })
 export class AdminComponent implements OnInit {
 
-// Lista de productos cargados desde el backend.
   productos: any[] = [];
-
-  // Formulario reactivo donde se cargan los datos del producto.
   formulario!: FormGroup;
 
-  // Indica si estamos editando un producto existente.
   editando = false;
-
-  // Contiene los datos del producto que se está editando.
   productoActual: any = null;
 
-  // Vista previa de la imagen antes de enviarla.
   imagenPrevia: string | null = null;
-
-  // Archivo físico seleccionado para subir al servidor.
   archivoImagen: File | null = null;
 
-  constructor(
-    // Servicio que maneja las operaciones CRUD de productos.
-    private productService: ProductService,
+  /** Lista fija de talles */
+  tallesLista: number[] = [35, 36, 37, 38, 39, 40, 41, 42, 43];
 
-    // FormBuilder para simplificar la creación del formulario reactivo.
+  /** Donde guardamos los talles seleccionados */
+  tallesSeleccionados: number[] = [];
+
+  constructor(
+    private productService: ProductService,
     private fb: FormBuilder
   ) {}
 
-  // Se ejecuta al iniciar el componente.
   ngOnInit(): void {
-    this.crearFormulario();   // Inicializa el formulario con validaciones.
-    this.cargarProductos();   // Obtiene todos los productos del backend.
+    this.crearFormulario();
+    this.cargarProductos();
   }
 
-  // Configura el formulario reactivo y sus campos.
   crearFormulario() {
     this.formulario = this.fb.group({
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
       precio: [0, [Validators.required, Validators.min(1)]],
       stock: [0, Validators.required],
-      imagen: [''] // Este campo solo se usa para mantener el archivo seleccionado.
+      marca: ['', Validators.required],
+      tallesDisponibles: [[]],
+      imagen: ['']
     });
   }
 
-  // Llama al backend para obtener la lista de productos.
   cargarProductos() {
     this.productService.obtenerProductos().subscribe({
       next: (res) => this.productos = res,
@@ -64,50 +56,58 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  // Maneja el cambio de archivo cuando el usuario selecciona una imagen.
   onFileChange(event: any) {
     const file = event.target.files[0];
-    if (!file) return; // Si no se seleccionó nada, no hacemos nada.
+    if (!file) return;
 
-    // Guardamos la imagen física para enviarla luego en FormData.
     this.archivoImagen = file;
 
-    // Preparamos vista previa usando FileReader.
     const reader = new FileReader();
     reader.onload = () => (this.imagenPrevia = reader.result as string);
     reader.readAsDataURL(file);
   }
 
-  // Guarda un producto: crea uno nuevo o actualiza uno existente según "editando".
-  guardar() {
+  /** Activar o desactivar un talle */
+  toggleTalle(talle: number, event: any) {
+    if (event.target.checked) {
+      this.tallesSeleccionados.push(talle);
+    } else {
+      this.tallesSeleccionados = this.tallesSeleccionados.filter(t => t !== talle);
+    }
 
-    // Armamos un FormData, obligatorio para enviar archivos.
+    // Actualiza el form control
+    this.formulario.patchValue({
+      tallesDisponibles: this.tallesSeleccionados
+    });
+  }
+
+  guardar() {
     const formData = new FormData();
+
     formData.append("nombre", this.formulario.value.nombre);
     formData.append("descripcion", this.formulario.value.descripcion);
     formData.append("precio", this.formulario.value.precio);
     formData.append("stock", this.formulario.value.stock);
+    formData.append("marca", this.formulario.value.marca);
 
-    // Solo enviamos la imagen si se seleccionó una nueva.
+    formData.append("tallesDisponibles", JSON.stringify(this.tallesSeleccionados));
+
     if (this.archivoImagen) {
       formData.append("imagen", this.archivoImagen);
     }
 
-    // EDICIÓN
     if (this.editando) {
 
       this.productService.actualizarProducto(this.productoActual.id, formData).subscribe({
         next: () => {
           alert("Producto actualizado");
-          this.reset();           // Resetea los estados del formulario.
-          this.cargarProductos(); // Refresca la lista.
+          this.reset();
+          this.cargarProductos();
         },
         error: (err) => console.error("Error actualizando producto", err)
       });
 
-    } 
-    // CREACIÓN
-    else {
+    } else {
 
       this.productService.crearProducto(formData).subscribe({
         next: () => {
@@ -120,26 +120,26 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  // Cargar datos de un producto en el formulario para editarlo.
   editar(producto: any) {
     this.editando = true;
     this.productoActual = producto;
 
-    // Cargar datos actuales al formulario.
+    this.tallesSeleccionados = JSON.parse(producto.tallesDisponibles || '[]');
+
     this.formulario.patchValue({
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio: producto.precio,
-      stock: producto.stock
+      stock: producto.stock,
+      marca: producto.marca,
+      tallesDisponibles: this.tallesSeleccionados
     });
 
-    // Arma la URL completa para mostrar la imagen previa.
     this.imagenPrevia = producto.imagen
       ? `http://localhost/api_proyecto/public/uploads/${producto.imagen}`
       : null;
   }
 
-  // Elimina un producto del backend.
   eliminar(id: number) {
     if (!confirm("¿Seguro de eliminar este producto?")) return;
 
@@ -152,12 +152,12 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  // Resetea el formulario y vuelve al estado inicial.
   reset() {
     this.formulario.reset();
     this.editando = false;
     this.productoActual = null;
     this.imagenPrevia = null;
     this.archivoImagen = null;
+    this.tallesSeleccionados = [];
   }
 }

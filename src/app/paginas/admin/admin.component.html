@@ -22,9 +22,31 @@
       </div>
     </div>
 
+    <!-- MARCA -->
     <div class="campo">
-      <label>Descripción</label>
-      <textarea formControlName="descripcion" rows="3" class="input"></textarea>
+      <label>Marca</label>
+      <select formControlName="marca" class="input">
+        <option value="Adidas">Adidas</option>
+        <option value="Jordan 1">Jordan 1</option>
+        <option value="Jordan Retro 11">Jordan Retro 11</option>
+        <option value="Jordan Retro 4">Jordan Retro 4</option>
+        <option value="Jordan Retro 3">Jordan Retro 3</option>
+        <option value="Artistas">Artistas</option>
+      </select>
+    </div>
+
+    <!-- TALLES DISPONIBLES -->
+    <div class="campo">
+      <label>Talles disponibles</label>
+
+      <div class="talles-container">
+        <label *ngFor="let t of tallesLista" class="talle-item">
+          <input type="checkbox"
+                 [value]="t"
+                 (change)="toggleTalle(t, $event)" />
+          {{ t }}
+        </label>
+      </div>
     </div>
 
     <div class="campo">
@@ -57,6 +79,8 @@
           <th>ID</th>
           <th>Imagen</th>
           <th>Nombre</th>
+          <th>Marca</th>
+          <th>Talles</th>
           <th>Precio</th>
           <th>Stock</th>
           <th>Acciones</th>
@@ -74,6 +98,8 @@
           </td>
 
           <td>{{ p.nombre }}</td>
+          <td>{{ p.marca }}</td>
+          <td>{{ p.tallesDisponibles }}</td>
           <td>$ {{ p.precio }}</td>
           <td>{{ p.stock }}</td>
 

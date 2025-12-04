@@ -8,48 +8,44 @@ import { IniciodesesionComponent } from './paginas/iniciodesesion/iniciodesesion
 import { RegistroComponent } from './paginas/registro/registro.component';
 import { InicioComponent } from './paginas/inicio/inicio.component';
 import { CompraComponent } from './paginas/compra/compra.component';
-import { AdminGuard } from './paginas/guards/admin.guard';// importa el guard
+import { AdminGuard } from './paginas/guards/admin.guard';
 import { AdminComponent } from './paginas/admin/admin.component';
-import { TicketComponent } from './paginas/ticket/ticket.component';
-
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/inicio', pathMatch: 'full' },
+
+  // Redirect principal
+  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+
+  // Páginas principales
+  { path: 'inicio', component: InicioComponent },
   { path: 'producto', component: ProductosComponent },
   { path: 'producto/marca/:marca', component: ProductosComponent },
   { path: 'novedades', component: NovedadesComponent },
   { path: 'favoritos', component: FavoritosComponent },
   { path: 'quienesomos', component: QuienesSomosComponent },
   { path: 'carrito', component: CarritoComponent },
+  { path: 'compra', component: CompraComponent },
+
+  // Auth
   { path: 'iniciodesesion', component: IniciodesesionComponent },
   { path: 'registro', component: RegistroComponent },
-  { path: 'inicio', component: InicioComponent },
-  { path: 'compra', component: CompraComponent },
-  { path: '**', redirectTo: '/inicio' },
+
+  // Admin protegido con guard
   {
     path: 'admin',
     component: AdminComponent,
     canActivate: [AdminGuard]
   },
-   // Auth: inicio de sesión
-  // -----------------------------------------------------------
-  { path: 'login', component: IniciodesesionComponent },
 
-  // -----------------------------------------------------------
-  // Auth: registro de usuario
-  // -----------------------------------------------------------
-  { path: 'register', component: RegistroComponent },
-   // -----------------------------------------------------------
-  // Página del ticket generado tras comprar
-  // Se usa loadComponent() → lazy loading del componente
-  // Esto evita cargar el componente hasta que alguien acceda.
-  // Se obtiene el :id de la compra (id_compra)
-  // -----------------------------------------------------------
+  // Ticket dinámico (lazy loading)
   {
     path: 'ticket/:id',
     loadComponent: () =>
       import('./paginas/ticket/ticket.component')
-      .then(m => m.TicketComponent)
+        .then(m => m.TicketComponent)
   },
+
+  // Wildcard (siempre último)
+  { path: '**', redirectTo: 'inicio' }
 
 ];
