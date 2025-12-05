@@ -27,7 +27,7 @@
 
           <td>{{ item.talle }}</td>
 
-          <td>$ {{ item.producto.precio }}</td>
+         <td>$ {{ item.precio_unitario ?? item.producto.precio }}</td>
 
           <td>
             <button (click)="quitarCantidad(i)">−</button>
@@ -41,7 +41,7 @@
             </button>
           </td>
 
-          <td>$ {{ item.cantidad * item.producto.precio }}</td>
+          <td>$ {{ item.cantidad * (item.precio_unitario ?? item.producto.precio) }}</td>
         </tr>
       </tbody>
     </table>

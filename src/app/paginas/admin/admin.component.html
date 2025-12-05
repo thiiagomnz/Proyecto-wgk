@@ -66,7 +66,7 @@
       <button class="btn limpiar" type="button" (click)="reset()">
         Limpiar
       </button>
-    </div>
+    </div>  
   </form>
 
   <!-- LISTA DE PRODUCTOS -->
@@ -99,7 +99,10 @@
 
           <td>{{ p.nombre }}</td>
           <td>{{ p.marca }}</td>
-          <td>{{ p.tallesDisponibles }}</td>
+
+          <!-- 🔥 AHORA SE MUESTRAN BIEN LOS TALLES COMO TEXTO -->
+          <td>{{ p.tallesDisponibles?.join(', ') }}</td>
+
           <td>$ {{ p.precio }}</td>
           <td>{{ p.stock }}</td>
 

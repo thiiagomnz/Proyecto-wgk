@@ -21,10 +21,9 @@ export class AdminComponent implements OnInit {
   imagenPrevia: string | null = null;
   archivoImagen: File | null = null;
 
-  /** Lista fija de talles */
   tallesLista: number[] = [35, 36, 37, 38, 39, 40, 41, 42, 43];
 
-  /** Donde guardamos los talles seleccionados */
+  /** donde guardo los talles seleccionados */
   tallesSeleccionados: number[] = [];
 
   constructor(
@@ -40,7 +39,6 @@ export class AdminComponent implements OnInit {
   crearFormulario() {
     this.formulario = this.fb.group({
       nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
       precio: [0, [Validators.required, Validators.min(1)]],
       stock: [0, Validators.required],
       marca: ['', Validators.required],
@@ -52,7 +50,7 @@ export class AdminComponent implements OnInit {
   cargarProductos() {
     this.productService.obtenerProductos().subscribe({
       next: (res) => this.productos = res,
-      error: (err) => console.error('Error cargando productos', err)
+      error: (err) => console.error('Error', err)
     });
   }
 
@@ -67,15 +65,16 @@ export class AdminComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  /** Activar o desactivar un talle */
+  /** 👉 Marca / desmarca talles */
   toggleTalle(talle: number, event: any) {
     if (event.target.checked) {
-      this.tallesSeleccionados.push(talle);
+      if (!this.tallesSeleccionados.includes(talle)) {
+        this.tallesSeleccionados.push(talle);
+      }
     } else {
       this.tallesSeleccionados = this.tallesSeleccionados.filter(t => t !== talle);
     }
 
-    // Actualiza el form control
     this.formulario.patchValue({
       tallesDisponibles: this.tallesSeleccionados
     });
@@ -85,11 +84,11 @@ export class AdminComponent implements OnInit {
     const formData = new FormData();
 
     formData.append("nombre", this.formulario.value.nombre);
-    formData.append("descripcion", this.formulario.value.descripcion);
     formData.append("precio", this.formulario.value.precio);
     formData.append("stock", this.formulario.value.stock);
     formData.append("marca", this.formulario.value.marca);
 
+    // 🔥 GUARDA ARRAY JSON CORRECTAMENTE
     formData.append("tallesDisponibles", JSON.stringify(this.tallesSeleccionados));
 
     if (this.archivoImagen) {
@@ -97,25 +96,21 @@ export class AdminComponent implements OnInit {
     }
 
     if (this.editando) {
-
       this.productService.actualizarProducto(this.productoActual.id, formData).subscribe({
         next: () => {
           alert("Producto actualizado");
           this.reset();
           this.cargarProductos();
-        },
-        error: (err) => console.error("Error actualizando producto", err)
+        }
       });
 
     } else {
-
       this.productService.crearProducto(formData).subscribe({
         next: () => {
           alert("Producto creado");
           this.reset();
           this.cargarProductos();
-        },
-        error: () => alert("Error al crear producto")
+        }
       });
     }
   }
@@ -124,11 +119,13 @@ export class AdminComponent implements OnInit {
     this.editando = true;
     this.productoActual = producto;
 
-    this.tallesSeleccionados = JSON.parse(producto.tallesDisponibles || '[]');
+    // 🔥 Asegura que tallesDisponibles sea un array real
+    this.tallesSeleccionados = Array.isArray(producto.tallesDisponibles)
+      ? producto.tallesDisponibles
+      : JSON.parse(producto.tallesDisponibles || "[]");
 
     this.formulario.patchValue({
       nombre: producto.nombre,
-      descripcion: producto.descripcion,
       precio: producto.precio,
       stock: producto.stock,
       marca: producto.marca,
@@ -141,14 +138,13 @@ export class AdminComponent implements OnInit {
   }
 
   eliminar(id: number) {
-    if (!confirm("¿Seguro de eliminar este producto?")) return;
+    if (!confirm("¿Seguro?")) return;
 
     this.productService.eliminarProducto(id).subscribe({
       next: () => {
         alert("Producto eliminado");
         this.cargarProductos();
-      },
-      error: () => alert("Error eliminando producto")
+      }
     });
   }
 
@@ -156,8 +152,8 @@ export class AdminComponent implements OnInit {
     this.formulario.reset();
     this.editando = false;
     this.productoActual = null;
-    this.imagenPrevia = null;
     this.archivoImagen = null;
+    this.imagenPrevia = null;
     this.tallesSeleccionados = [];
   }
 }
