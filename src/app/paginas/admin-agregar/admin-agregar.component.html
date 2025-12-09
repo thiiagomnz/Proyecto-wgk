@@ -1,0 +1,61 @@
+<div class="admin-container">
+
+  <h2 class="titulo">Agregar Producto</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="form-card">
+
+    <div class="fila">
+      <div class="campo">
+        <label>Nombre</label>
+        <input formControlName="nombre" class="input" />
+      </div>
+
+      <div class="campo">
+        <label>Precio</label>
+        <input type="number" formControlName="precio" class="input" />
+      </div>
+
+      <div class="campo">
+        <label>Stock</label>
+        <input type="number" formControlName="stock" class="input" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Marca</label>
+      <select formControlName="marca" class="input">
+        <option value="Adidas">Adidas</option>
+        <option value="Jordan 1">Jordan 1</option>
+        <option value="Jordan Retro 11">Jordan Retro 11</option>
+        <option value="Jordan Retro 4">Jordan Retro 4</option>
+        <option value="Jordan Retro 3">Jordan Retro 3</option>
+        <option value="Artistas">Artistas</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label>Talles disponibles</label>
+
+      <div class="talles-container">
+        <label *ngFor="let t of tallesLista" class="talle-item">
+          <input type="checkbox" [value]="t" (change)="toggleTalle(t, $event)" />
+          {{ t }}
+        </label>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Imagen</label>
+      <input type="file" (change)="onFileChange($event)" class="input" />
+    </div>
+
+    <div class="preview" *ngIf="imagenPrevia">
+      <img [src]="imagenPrevia" />
+    </div>
+
+    <div class="acciones">
+      <button class="btn guardar" type="submit">Crear Producto</button>
+    </div>
+
+  </form>
+</div>

@@ -12,14 +12,21 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   // ============================================================
-  // OBTENER TODOS LOS PRODUCTOS
+  // ✔ OBTENER TODOS LOS PRODUCTOS
   // ============================================================
   obtenerProductos(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
 
   // ============================================================
-  // CREAR PRODUCTO
+  // ✔ OBTENER SOLO 1 PRODUCTO POR ID
+  // ============================================================
+  obtenerProducto(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  // ============================================================
+  // ✔ CREAR PRODUCTO
   // ============================================================
   crearProducto(formData: FormData): Observable<any> {
     const token = localStorage.getItem('token') || '';
@@ -36,24 +43,26 @@ export class ProductService {
   }
 
   // ============================================================
-  // ACTUALIZAR PRODUCTO
-  // ============================================================
-  actualizarProducto(id: number, formData: FormData): Observable<any> {
-    const token = localStorage.getItem('token') || '';
+actualizarProducto(id: number, formData: FormData): Observable<any> {
+  const token = localStorage.getItem('token') || '';
 
-    return this.http.post(
-      `${this.apiUrl}/${id}?_method=PUT`,
-      formData,
-      {
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${token}`
-        })
-      }
-    );
-  }
+  // 👉 AGREGAR _method DENTRO DEL FORMDATA (PHP LO LEE)
+  formData.append('_method', 'PUT');
+
+  return this.http.post(
+    `${this.apiUrl}/${id}`,
+    formData,
+    {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      })
+    }
+  );
+}
+
 
   // ============================================================
-  // ELIMINAR PRODUCTO
+  // ✔ ELIMINAR PRODUCTO
   // ============================================================
   eliminarProducto(id: number): Observable<any> {
     const token = localStorage.getItem('token') || '';
@@ -68,4 +77,5 @@ export class ProductService {
       }
     );
   }
+
 }

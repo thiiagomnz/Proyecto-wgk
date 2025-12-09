@@ -8,12 +8,15 @@ import { IniciodesesionComponent } from './paginas/iniciodesesion/iniciodesesion
 import { RegistroComponent } from './paginas/registro/registro.component';
 import { InicioComponent } from './paginas/inicio/inicio.component';
 import { CompraComponent } from './paginas/compra/compra.component';
-import { AdminGuard } from './paginas/guards/admin.guard';
-import { AdminComponent } from './paginas/admin/admin.component';
 
+import { AdminGuard } from './paginas/guards/admin.guard';
+
+// ADMIN COMPONENTES
+import { AdminComponent } from './paginas/admin/admin.component';
+import { AgregarProductoComponent } from './paginas/admin-agregar/admin-agregar.component';
+import { EditarProductoComponent } from './paginas/admin-editar/admin-editar.component';
 export const routes: Routes = [
 
-  // Redirect principal
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
 
   // Páginas principales
@@ -30,22 +33,25 @@ export const routes: Routes = [
   { path: 'iniciodesesion', component: IniciodesesionComponent },
   { path: 'registro', component: RegistroComponent },
 
-  // Admin protegido con guard
   {
-    path: 'admin',
-    component: AdminComponent,
-    canActivate: [AdminGuard]
-  },
+  path: 'admin',
+  canActivate: [AdminGuard],
+  children: [
+    { path: '', component: AdminComponent },             // LISTA
+    { path: 'agregar', component: AgregarProductoComponent },
+    { path: 'editar/:id', component: EditarProductoComponent }
+  ]
+},
 
-  // Ticket dinámico (lazy loading)
-  {
+  // Ticket dinámico
+{
     path: 'ticket/:id',
     loadComponent: () =>
       import('./paginas/ticket/ticket.component')
         .then(m => m.TicketComponent)
-  },
+},
 
-  // Wildcard (siempre último)
+  // Wildcard
   { path: '**', redirectTo: 'inicio' }
 
 ];

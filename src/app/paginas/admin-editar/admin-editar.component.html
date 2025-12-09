@@ -1,0 +1,60 @@
+<div class="admin-container">
+
+  <h2 class="titulo">Editar producto</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardarCambios()" class="form-card">
+
+    <div class="fila">
+      <div class="campo">
+        <label>Nombre</label>
+        <input formControlName="nombre" class="input" />
+      </div>
+
+      <div class="campo">
+        <label>Precio</label>
+        <input type="number" formControlName="precio" class="input" />
+      </div>
+
+      <div class="campo">
+        <label>Stock</label>
+        <input type="number" formControlName="stock" class="input" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Marca</label>
+      <select formControlName="marca" class="input">
+        <option *ngFor="let m of ['Adidas','Jordan 1','Jordan Retro 11','Jordan Retro 4','Jordan Retro 3','Artistas']">{{ m }}</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label>Talles disponibles</label>
+
+      <div class="talles-container">
+        <label *ngFor="let t of tallesLista" class="talle-item">
+          <input type="checkbox"
+                 [checked]="tallesSeleccionados.includes(t)"
+                 (change)="toggleTalle(t, $event)" />
+          {{ t }}
+        </label>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Imagen</label>
+      <input type="file" (change)="onFileChange($event)" class="input">
+    </div>
+
+    <div class="preview" *ngIf="imagenPrevia">
+      <img [src]="imagenPrevia">
+    </div>
+
+    <div class="acciones">
+      <button class="btn guardar" type="submit">Guardar cambios</button>
+      <button class="btn limpiar" type="button" (click)="router.navigate(['/admin'])">Volver</button>
+    </div>
+
+  </form>
+
+</div>
