@@ -7,6 +7,7 @@ import { CarritoService } from '../../servicios/carrito.service';
 import { FavoritosService } from '../../servicios/favoritos.service';
 import { BuscadorService } from '../../servicios/buscador.service';
 import { ProductService } from '../../servicios/productos.service';
+import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-productos',
@@ -30,7 +31,8 @@ export class ProductosComponent implements OnInit {
     private favoritoService: FavoritosService,
     private route: ActivatedRoute,
     public buscadorService: BuscadorService,
-    private productService: ProductService
+    private productService: ProductService,
+    public authService: AuthService            // 👈 agregado
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +69,6 @@ export class ProductosComponent implements OnInit {
             ? `http://localhost/api_proyecto/public/uploads/${p.imagen}`
             : '',
 
-          // 🚀 ESTA ES LA LÍNEA CORRECTA
           tallesDisponibles: Array.isArray(p.tallesDisponibles)
             ? p.tallesDisponibles
             : JSON.parse(p.tallesDisponibles || "[]"),
@@ -117,29 +118,55 @@ export class ProductosComponent implements OnInit {
     return (this.seleccionados[producto.id] || []).includes(talle);
   }
 
- agregar(producto: Producto) {
-  const tallesSeleccionados = this.seleccionados[producto.id] || [];
+  // 🔥🔥🔥 AGREGAR AL CARRITO — ahora protege si no inició sesión
+  agregar(producto: Producto) {
 
-  if (tallesSeleccionados.length === 0) {
-    alert("Selecciona al menos un talle");
+    // 1️⃣ Verificar si está logueado
+    if (!this.authService.isLoggedIn()) {
+      alert("Debes iniciar sesión para agregar al carrito.");
+      return; // ❌ corta todo
+    }
+
+    const tallesSeleccionados = this.seleccionados[producto.id] || [];
+
+    if (tallesSeleccionados.length === 0) {
+      alert("Selecciona al menos un talle");
+      return;
+    }
+
+    // 2️⃣ Enviar al backend porque ya está logueado
+    tallesSeleccionados.forEach(talle => {
+      this.carritoService.agregarAlCarrito({ producto, talle }).subscribe({
+        next: () => {
+          this.carritoService.cargarCarrito();
+        },
+        error: err => console.error(err)
+      });
+    });
+
+    alert("Agregado al carrito");
+    this.seleccionados[producto.id] = [];
+  }
+
+ agregarFav(producto: Producto) {
+
+  // 1️⃣ Verificar si el usuario NO inició sesión
+  if (!this.authService.isLoggedIn()) {
+    alert("Debes iniciar sesión para agregar a favoritos.");
     return;
   }
 
-  tallesSeleccionados.forEach(talle => {
-    this.carritoService.agregarAlCarrito({ producto, talle }).subscribe({
-      next: () => {
-        this.carritoService.cargarCarrito(); // 🔥 ACTUALIZA EL CARRITO GLOBAL
-      },
-      error: err => console.error(err)
-    });
+  // 2️⃣ Llamar al servicio y SUSCRIBIRSE
+  this.favoritoService.agregarAFavoritos(producto).subscribe({
+    next: (res) => {
+      console.log("Favorito agregado:", res);
+      alert("Producto agregado a favoritos");
+    },
+    error: (err) => {
+      console.error("Error al agregar favorito:", err);
+      alert("No se pudo agregar a favoritos");
+    }
   });
-
-  alert("Agregado al carrito");
-  this.seleccionados[producto.id] = [];
 }
 
-  agregarFav(producto: Producto) {
-    this.favoritoService.agregarAFavoritos(producto);
-    alert('Producto agregado a favoritos');
-  }
 }

@@ -1,5 +1,6 @@
 <div class="favoritos-page">
   <div class="favoritos-box">
+
     <h1>Favoritos</h1>
 
     <div *ngIf="productosEnFavorito.length === 0">
@@ -15,22 +16,35 @@
           <th>Acción</th>
         </tr>
       </thead>
+
       <tbody>
-        <tr *ngFor="let item of productosEnFavorito; let i = index">
+        <tr *ngFor="let item of productosEnFavorito">
+
+          <!-- IMAGEN -->
           <td>
-            <img [src]="item.producto.imagen" alt="{{item.producto.nombre}}" />
+            <img 
+              [src]="item.producto.imagen" 
+              alt="{{item.producto.nombre}}" 
+              width="80"
+            />
           </td>
+
+          <!-- NOMBRE -->
           <td>{{ item.producto.nombre }}</td>
+
+          <!-- PRECIO -->
           <td>${{ item.producto.precio }}</td>
+
+          <!-- ELIMINAR -->
           <td>
-            <button (click)="eliminarProductoFav(item.producto.id)">
+            <button (click)="eliminarProductoFav(item.id_producto)">
               Eliminar
             </button>
           </td>
+
         </tr>
       </tbody>
     </table>
+
   </div>
 </div>
-
-

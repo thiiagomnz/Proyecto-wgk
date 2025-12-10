@@ -13,18 +13,13 @@ export interface FavoritoItem {
 })
 export class FavoritosService {
 
-  // URL BASE de tu API
   private apiUrl = 'http://localhost/api_proyecto/public/favoritos';
 
-  // Estado interno con BehaviorSubject
   private favoritoSubject = new BehaviorSubject<FavoritoItem[]>([]);
   favorito$ = this.favoritoSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  // ---------------------------------------------------------
-  // Headers con token del usuario
-  // ---------------------------------------------------------
   private getAuthHeaders(): HttpHeaders {
     const token = (typeof localStorage !== 'undefined')
       ? localStorage.getItem('token') || ''
@@ -38,7 +33,6 @@ export class FavoritosService {
 
   // =============================================================
   // OBTENER FAVORITOS DEL BACKEND
-  // GET /favoritos
   // =============================================================
   obtenerFavoritos(): Observable<any> {
     return this.http.get(
@@ -47,34 +41,65 @@ export class FavoritosService {
     );
   }
 
-  // Cargar favoritos al iniciar la app
   cargarFavoritos() {
     this.obtenerFavoritos().subscribe({
       next: (items: any[]) => {
-        this.favoritoSubject.next(items);
+
+        // 🚀 TIPADO EXPLÍCITO EN .map()
+        const formateados: FavoritoItem[] = items.map((i: any) => ({
+          id_producto: i.id_producto,
+          producto: {
+            id: i.id_producto,
+            nombre: i.nombre,
+            precio: Number(i.precio),
+            marca: i.marca,
+            imagen: i.imagen
+              ? `http://localhost/api_proyecto/public/uploads/${i.imagen}`
+              : '',
+            tallesDisponibles: [],
+            stock: 0,
+            cantidad: 1,
+            disponible: true
+          }
+        }));
+
+        this.favoritoSubject.next(formateados);
       },
-      error: () => {
-        this.favoritoSubject.next([]);
-      }
+      error: () => this.favoritoSubject.next([])
     });
   }
 
   // =============================================================
-  // AGREGAR FAVORITO
-  // POST /favoritos/agregar
-  // Body: { id_producto }
+  // AGREGAR A FAVORITOS
   // =============================================================
   agregarAFavoritos(producto: Producto): Observable<any> {
     const body = { id_producto: producto.id };
 
-    return this.http.post(
-      `${this.apiUrl}/agregar`,
-      body,
-      { headers: this.getAuthHeaders() }
-    ).pipe(
+    return this.http.post(`${this.apiUrl}/agregar`, body, {
+      headers: this.getAuthHeaders()
+    }).pipe(
       tap((response: any) => {
         if (response?.favoritos) {
-          this.favoritoSubject.next(response.favoritos);
+
+          // 🚀 TIPADO EXPLÍCITO EN .map()
+          const formateados: FavoritoItem[] = response.favoritos.map((i: any) => ({
+            id_producto: i.id_producto,
+            producto: {
+              id: i.id_producto,
+              nombre: i.nombre,
+              precio: Number(i.precio),
+              marca: i.marca,
+              imagen: i.imagen
+                ? `http://localhost/api_proyecto/public/uploads/${i.imagen}`
+                : '',
+              tallesDisponibles: [],
+              stock: 0,
+              cantidad: 1,
+              disponible: true
+            }
+          }));
+
+          this.favoritoSubject.next(formateados);
         }
       })
     );
@@ -82,7 +107,6 @@ export class FavoritosService {
 
   // =============================================================
   // ELIMINAR FAVORITO
-  // DELETE /favoritos/eliminar/:idProducto
   // =============================================================
   eliminarDeFavoritos(idProducto: number): Observable<any> {
     return this.http.delete(
@@ -99,8 +123,6 @@ export class FavoritosService {
 
   // =============================================================
   // VACIAR FAVORITOS
-  // DELETE /favoritos/vaciar
-  // (si tu backend no lo tiene, decímelo y lo creo)
   // =============================================================
   vaciarFavoritos(): Observable<any> {
     return this.http.delete(

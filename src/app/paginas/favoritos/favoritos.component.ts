@@ -1,36 +1,58 @@
-import { Component, OnInit} from '@angular/core';
-import { FavoritosService } from '../../servicios/favoritos.service';
-import { Producto } from '../../model/producto.model';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FavoritosService, FavoritoItem } from '../../servicios/favoritos.service';
 import { CommonModule } from '@angular/common';
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-favoritos',
-  imports: [CommonModule,FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './favoritos.component.html',
   styleUrl: './favoritos.component.css'
 })
-export class FavoritosComponent implements OnInit{
-  productosEnFavorito: {producto:Producto}[] = []
-  constructor(private favoritosService: FavoritosService){}
+export class FavoritosComponent implements OnInit {
+
+  productosEnFavorito: FavoritoItem[] = [];
+
+  constructor(private favoritosService: FavoritosService) {}
 
   ngOnInit(): void {
-    this.favoritosService.favorito$.subscribe((productos)=>{
-      this.productosEnFavorito = productos;
-    })
+
+    // 🔥 Escucha permanente de cambios en favoritos
+    this.favoritosService.favorito$.subscribe((items) => {
+      console.log("👉 FAVORITOS RECIBIDOS:", items);
+      this.productosEnFavorito = items;
+    });
+
+    // 🔥 Cargar favoritos apenas se abre la página
+    this.favoritosService.cargarFavoritos();
   }
 
-  eliminarProductoFav(productoId:number){
-    this.favoritosService.eliminarDeFavoritos(productoId)
+  // ---------------------------------------------------------
+  // 🗑 ELIMINAR UN FAVORITO
+  // ---------------------------------------------------------
+  eliminarProductoFav(idProducto: number) {
+    this.favoritosService.eliminarDeFavoritos(idProducto).subscribe(() => {
+      console.log("Producto eliminado, recargando favoritos...");
+      this.favoritosService.cargarFavoritos();
+    });
   }
 
-  vaciarFavoritos(){
-    this.favoritosService.vaciarFavoritos()
+  // ---------------------------------------------------------
+  // ❌ VACIAR TODOS LOS FAVORITOS
+  // ---------------------------------------------------------
+  vaciarFavoritos() {
+    this.favoritosService.vaciarFavoritos().subscribe(() => {
+      console.log("Favoritos vaciados.");
+      this.productosEnFavorito = [];
+    });
   }
 
-   realizarCompra(){
-    alert('compra Realizada')
-    this.vaciarFavoritos()
+  // ---------------------------------------------------------
+  // 🛒 Simular compra
+  // ---------------------------------------------------------
+  realizarCompra() {
+    alert('Compra realizada');
+    this.vaciarFavoritos();
   }
 }

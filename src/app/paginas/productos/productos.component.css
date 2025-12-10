@@ -9,13 +9,13 @@
   flex-direction: column;
 }
 
-/* Efecto hover de la card */
+/* Hover de la card */
 .card:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 25px rgba(250, 250, 250, 0.6);
 }
 
-/* Texto NUEVO / etiqueta */
+/* Etiqueta NUEVO */
 .card .nuevo-label {
   font-size: 1.1rem;
   font-weight: 800;
@@ -26,23 +26,41 @@
   text-align: center;
 }
 
-/* Imagen de producto */
-.card-img-top {
+/* ---------------------------
+     NUEVO SISTEMA DE IMAGEN
+   --------------------------- */
+
+/* Contenedor uniforme para imágenes */
+.card-image-container {
   width: 100%;
-  height: 250px;
-  object-fit: cover;
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  overflow: hidden;
   border-bottom: 2px solid #000000;
+}
+
+/* Imagen centrada y sin recortes */
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; 
   transition: transform 0.3s ease;
 }
 
-.card:hover .card-img-top {
+/* Hover suave sobre imagen */
+.card:hover .product-image {
   transform: scale(1.05);
 }
+
+/* --------------------------- */
 
 /* Cuerpo de la card */
 .card-body {
   flex-grow: 1;
-  padding: 15px 20px;
+  padding: 30px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -129,13 +147,13 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .card-img-top {
+  .card-image-container {
     height: 200px;
   }
 }
 
 @media (max-width: 480px) {
-  .card-img-top {
+  .card-image-container {
     height: 150px;
   }
   .card-title {
@@ -149,4 +167,36 @@
     height: 35px;
     font-size: 0.85rem;
   }
+}
+/* Contenedor de imagen centrada */
+.card-img-box {
+  width: 100%;
+  height: 260px; /* Ajustá si querés */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 2px solid #000;
+}
+
+.card-img-box {
+  width: 100%;
+  height: 300px; /* Aumenté el alto para que se vea mejor */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: #fff; /* Fondo blanco profesional, podés cambiarlo */
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* mantiene proporciones */
+  padding: 10px; /* para que no toque los bordes */
+}
+
+
+.card:hover .product-image {
+  transform: scale(1.05);
 }
