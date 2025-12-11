@@ -2,44 +2,74 @@
   <div class="row g-4">
 
     <div class="col-md-4" *ngFor="let producto of novedades">
-      <div class="card h-100 bg-dark text-white shadow-sm border-0">
+      <div class="card h-100 shadow-sm">
 
         <!-- Texto NUEVO -->
-        <div class="text-center mt-3">
-          <h5 class="fw-bold text-uppercase">NUEVO</h5>
-        </div>
+        <div class="nuevo-label">NUEVO</div>
 
         <!-- Imagen -->
-        <img 
-          [src]="producto.imagen" 
-          class="card-img-top" 
-          alt="{{ producto.nombre }}"
-        >
+        <div class="card-img-box">
+          <img 
+            *ngIf="producto.imagen"
+            [src]="producto.imagen"
+            alt="{{ producto.nombre }}"
+            class="product-image"
+          />
+
+          <img 
+            *ngIf="!producto.imagen"
+            src="assets/no-image.png"
+            alt="Sin imagen"
+            class="product-image"
+          />
+        </div>
 
         <!-- Info -->
         <div class="card-body d-flex flex-column text-center">
+
           <h5 class="card-title">{{ producto.nombre }}</h5>
           <p class="card-text">${{ producto.precio }}</p>
 
           <!-- Talles -->
           <div class="d-flex justify-content-center flex-wrap mb-3">
-            <div 
-              *ngFor="let talle of producto.tallesDisponibles" 
+            <div
+              *ngFor="let talle of producto.tallesDisponibles"
               class="talle-circle me-2 mb-2"
-             [class.selected]="(tallesSeleccionados[producto.id] || []).includes(talle)"
+              [class.selected]="(tallesSeleccionados[producto.id] || []).includes(talle)"
               (click)="seleccionarTalle(producto.id, talle)"
             >
               {{ talle }}
             </div>
           </div>
 
-          <!-- Botones -->
-          <button class="btn btn-success mb-2" (click)="agregar(producto)">
+          <!-- ==========================================================
+               BOTÓN AGREGAR AL CARRITO
+          ========================================================== -->
+          <button 
+            class="btn btn-success mb-2"
+            (click)="
+              authService.isLoggedIn()
+                ? agregar(producto)
+                : mostrarAlerta('Inicia sesión', 'Debes iniciar sesión para agregar al carrito.', 'warning')
+            "
+          >
             Agregar al carrito
           </button>
-          <button class="btn btn-outline-light" (click)="agregarFav(producto)">
+
+          <!-- ==========================================================
+               BOTÓN AGREGAR A FAVORITOS
+          ========================================================== -->
+          <button 
+            class="btn btn-outline-light"
+            (click)="
+              authService.isLoggedIn()
+                ? agregarFav(producto)
+                : mostrarAlerta('Inicia sesión', 'Debes iniciar sesión para agregar a favoritos.', 'warning')
+            "
+          >
             Agregar a favoritos
           </button>
+
         </div>
 
       </div>

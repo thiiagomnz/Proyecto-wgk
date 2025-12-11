@@ -1,57 +1,90 @@
 <div class="carrito-page">
   <div class="carrito-box">
-    <h1>Carrito de Compras</h1>
+    
+    <h1 class="titulo-carrito">Carrito de Compras</h1>
 
-    <div *ngIf="productosEnCarrito.length === 0">
-      <p>No hay productos en el carrito</p>
+    <!-- CARRITO VACÍO -->
+    <div *ngIf="productosEnCarrito.length === 0" class="carrito-vacio">
+      <p>Tu carrito está vacío</p>
     </div>
 
-    <table class="table" *ngIf="productosEnCarrito.length > 0">
+    <!-- TABLA DEL CARRITO -->
+    <table class="carrito-table" *ngIf="productosEnCarrito.length > 0">
+
       <thead>
         <tr>
           <th>Imagen</th>
-          <th>Nombre</th>
+          <th>Producto</th>
           <th>Talle</th>
           <th>Precio</th>
           <th>Cantidad</th>
-          <th>Acciones</th>
+          <th>Eliminar</th>
           <th>Total</th>
         </tr>
       </thead>
 
       <tbody>
+
         <tr *ngFor="let item of productosEnCarrito; let i = index">
-          <td><img [src]="item.producto.imagen" /></td>
 
-          <td>{{ item.producto.nombre }}</td>
-
-          <td>{{ item.talle }}</td>
-
-         <td>$ {{ item.precio_unitario ?? item.producto.precio }}</td>
-
-          <td>
-            <button (click)="quitarCantidad(i)">−</button>
-            {{ item.cantidad }}
-            <button (click)="agregarCantidad(i)">+</button>
+          <!-- IMAGEN -->
+          <td data-label="Imagen">
+            <img class="carrito-img" [src]="item.producto.imagen" alt="Imagen producto" />
           </td>
 
-          <td>
-            <button (click)="eliminarProducto(item.id_detalle!)">
-              Eliminar
+          <!-- NOMBRE -->
+          <td data-label="Producto" class="producto-nombre">
+            {{ item.producto.nombre }}
+          </td>
+
+          <!-- TALLE -->
+          <td data-label="Talle">
+            {{ item.talle }}
+          </td>
+
+          <!-- PRECIO -->
+          <td data-label="Precio" class="precio">
+            ${{ item.precio_unitario ?? item.producto.precio }}
+          </td>
+
+          <!-- CANTIDAD -->
+          <td data-label="Cantidad">
+            <div class="qty-box">
+              <button class="qty-btn" (click)="quitarCantidad(i)">−</button>
+              <span class="qty-num">{{ item.cantidad }}</span>
+              <button class="qty-btn" (click)="agregarCantidad(i)">+</button>
+            </div>
+          </td>
+
+          <!-- ELIMINAR -->
+          <td data-label="Eliminar">
+            <button class="btn-eliminar" (click)="eliminarProducto(item.id_detalle!)">
+              <i class="bi bi-trash3"></i> Eliminar Producto
             </button>
           </td>
 
-          <td>$ {{ item.cantidad * (item.precio_unitario ?? item.producto.precio) }}</td>
+          <!-- TOTAL -->
+          <td data-label="Total" class="precio-total">
+            ${{ item.cantidad * (item.precio_unitario ?? item.producto.precio) }}
+          </td>
+
         </tr>
+
       </tbody>
     </table>
 
+    <!-- TOTAL GENERAL -->
     <div class="total-box" *ngIf="productosEnCarrito.length > 0">
-      <h4>Total: ${{ calcularTotal() }}</h4>
 
-      <button (click)="irAFormularioCompra()">
+      <h4 class="total-text">
+        Total: 
+        <span class="total-num">${{ calcularTotal() }}</span>
+      </h4>
+
+      <button class="btn-compra" (click)="irAFormularioCompra()">
         <i class="bi bi-cart-check"></i> Realizar compra
       </button>
+
     </div>
 
   </div>

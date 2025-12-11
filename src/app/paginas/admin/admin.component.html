@@ -1,9 +1,11 @@
 <div class="admin-container">
 
-  <h2 class="titulo">Productos existentes</h2>
+  <h2 class="titulo">Gestión de Productos</h2>
 
   <div class="acciones-superior">
-    <button class="btn agregar" (click)="agregarNuevo()">+ Agregar producto</button>
+    <button class="btn agregar" (click)="agregarNuevo()">
+      <i class="bi bi-plus-circle"></i> Agregar producto
+    </button>
   </div>
 
   <div class="tabla-container">
@@ -15,30 +17,59 @@
           <th>Marca</th>
           <th>Talles</th>
           <th>Precio</th>
-          <th>Stock</th>
+          <th>Novedades</th>
           <th>Acciones</th>
         </tr>
       </thead>
 
       <tbody>
+
         <tr *ngFor="let p of productos">
+
+          <!-- Imagen -->
           <td>
-            <img *ngIf="p.imagen"
-                 [src]="'http://localhost/api_proyecto/public/uploads/' + p.imagen"
-                 class="thumb" />
+            <img 
+              *ngIf="p.imagen"
+              [src]="p.imagen"
+              class="thumb"
+              alt="producto"
+            />
           </td>
 
+          <!-- Datos -->
           <td>{{ p.nombre }}</td>
           <td>{{ p.marca }}</td>
           <td>{{ p.tallesDisponibles?.join(', ') }}</td>
           <td>$ {{ p.precio }}</td>
-          <td>{{ p.stock }}</td>
 
-          <td class="acciones-tabla">
-            <button class="btn editar" (click)="editar(p.id)">Editar</button>
-            <button class="btn eliminar" (click)="eliminar(p.id)">Eliminar</button>
+          <!-- NOVEDADES -->
+          <td>
+            <button 
+              class="toggle-btn"
+              [class.activo]="p.es_novedad == 1"
+              (click)="toggleNovedad(p.id)"
+            >
+              <i class="bi" 
+                 [ngClass]="p.es_novedad == 1 ? 'bi-star-fill' : 'bi-star'">
+              </i>
+
+              {{ p.es_novedad == 1 ? 'Quitar' : 'Agregar' }}
+            </button>
           </td>
+
+          <!-- ACCIONES -->
+          <td class="acciones-tabla">
+            <button class="btn editar" (click)="editar(p.id)">
+              <i class="bi bi-pencil-square"></i> Editar
+            </button>
+
+            <button class="btn eliminar" (click)="eliminar(p.id)">
+              <i class="bi bi-trash-fill"></i> Eliminar
+            </button>
+          </td>
+
         </tr>
+
       </tbody>
 
     </table>

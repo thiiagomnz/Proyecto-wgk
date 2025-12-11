@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../servicios/productos.service';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-editar-producto',
   standalone: true,
@@ -16,7 +18,8 @@ export class EditarProductoComponent implements OnInit {
   formulario!: FormGroup;
   producto: any = null;
 
-  imagenPrevia: string | null = null;
+  imagenActual: string | null = null; 
+  imagenNueva: string | null = null;  
   archivoImagen: File | null = null;
 
   tallesLista = [35, 36, 37, 38, 39, 40, 41, 42, 43];
@@ -35,19 +38,18 @@ export class EditarProductoComponent implements OnInit {
     this.cargarProducto(id);
   }
 
-  crearFormulario() {
+  crearFormulario(): void {
     this.formulario = this.fb.group({
       nombre: ['', Validators.required],
-      precio: [0, Validators.required],
+      precio: [0, [Validators.required, Validators.min(1)]],
       stock: [0, Validators.required],
       marca: ['', Validators.required],
-      tallesDisponibles: [[]],
-      imagen: ['']
+      tallesDisponibles: [[]]
     });
   }
 
-  cargarProducto(id: number) {
-  this.productService.obtenerProducto(id).subscribe({
+  cargarProducto(id: number): void {
+    this.productService.obtenerProducto(id).subscribe({
 
       next: (data: any) => {
         this.producto = data;
@@ -64,16 +66,23 @@ export class EditarProductoComponent implements OnInit {
           tallesDisponibles: this.tallesSeleccionados
         });
 
-        if (data.imagen) {
-          this.imagenPrevia =
-            `http://localhost/api_proyecto/public/uploads/${data.imagen}`;
-        }
+        this.imagenActual = data.imagen;
       },
-      error: () => alert("Error cargando producto")
+
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo cargar el producto.',
+          background: '#111',
+          color: '#fff',
+          confirmButtonColor: '#b34700'
+        });
+      }
     });
   }
 
-  toggleTalle(talle: number, event: any) {
+  toggleTalle(talle: number, event: any): void {
     if (event.target.checked) {
       if (!this.tallesSeleccionados.includes(talle)) {
         this.tallesSeleccionados.push(talle);
@@ -87,19 +96,33 @@ export class EditarProductoComponent implements OnInit {
     });
   }
 
-  onFileChange(event: any) {
+  onFileChange(event: any): void {
     const file = event.target.files[0];
     if (!file) return;
 
     this.archivoImagen = file;
 
     const reader = new FileReader();
-    reader.onload = () => this.imagenPrevia = reader.result as string;
+    reader.onload = () => this.imagenNueva = reader.result as string;
     reader.readAsDataURL(file);
   }
 
-  guardarCambios() {
-    if (!this.producto) return;
+  // ⭐⭐ AHORA LA FUNCIÓN ES VOID → TS7030 RESUELTO ⭐⭐
+  guardarCambios(): void {
+
+    if (!this.formulario.valid) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos incompletos',
+        text: 'Completa todos los campos correctamente.',
+        background: '#111',
+        color: '#fff',
+        confirmButtonColor: '#ff8c42'
+      });
+      return;
+    }
+
+    if (!this.producto) return; // válido porque el método ahora es void
 
     const formData = new FormData();
 
@@ -114,11 +137,31 @@ export class EditarProductoComponent implements OnInit {
     }
 
     this.productService.actualizarProducto(this.producto.id, formData).subscribe({
+
       next: () => {
-        alert("Producto actualizado correctamente");
-        this.router.navigate(['/admin']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado',
+          text: 'Producto actualizado correctamente.',
+          background: '#111',
+          color: '#fff',
+          iconColor: '#ff8c42',
+          confirmButtonColor: '#b34700'
+        }).then(() => {
+          this.router.navigate(['/admin']);
+        });
       },
-      error: () => alert("Error al actualizar producto")
+
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo actualizar el producto.',
+          background: '#111',
+          color: '#fff',
+          confirmButtonColor: '#b34700'
+        });
+      }
     });
   }
 }

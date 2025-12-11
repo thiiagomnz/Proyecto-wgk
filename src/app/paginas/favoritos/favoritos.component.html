@@ -1,17 +1,20 @@
 <div class="favoritos-page">
   <div class="favoritos-box">
 
-    <h1>Favoritos</h1>
+    <h1 class="titulo-fav">MIS FAVORITOS</h1>
 
-    <div *ngIf="productosEnFavorito.length === 0">
-      <p>No hay productos en Favoritos</p>
+    <!-- LISTA VACÍA -->
+    <div *ngIf="productosEnFavorito.length === 0" class="fav-vacio">
+      <p>No tienes productos guardados en favoritos</p>
     </div>
 
-    <table class="table" *ngIf="productosEnFavorito.length > 0">
+    <!-- TABLA / LISTA -->
+    <table class="fav-table" *ngIf="productosEnFavorito.length > 0">
+
       <thead>
         <tr>
           <th>Imagen</th>
-          <th>Nombre</th>
+          <th>Producto</th>
           <th>Precio</th>
           <th>Acción</th>
         </tr>
@@ -21,29 +24,36 @@
         <tr *ngFor="let item of productosEnFavorito">
 
           <!-- IMAGEN -->
-          <td>
+          <td class="img-col">
             <img 
-              [src]="item.producto.imagen" 
-              alt="{{item.producto.nombre}}" 
-              width="80"
+              class="fav-img"
+              [src]="item.producto.imagen"
+              alt="{{item.producto.nombre}}"
             />
           </td>
 
-          <!-- NOMBRE -->
-          <td>{{ item.producto.nombre }}</td>
+          <!-- PRODUCTO -->
+          <td class="nombre-prod">
+            {{ item.producto.nombre }}
+          </td>
 
           <!-- PRECIO -->
-          <td>${{ item.producto.precio }}</td>
+          <td class="precio-prod">
+            ${{ item.producto.precio }}
+          </td>
 
-          <!-- ELIMINAR -->
-          <td>
-            <button (click)="eliminarProductoFav(item.id_producto)">
-              Eliminar
+          <!-- ACCIÓN -->
+          <td class="accion-col">
+            <button 
+              class="btn-eliminar-fav"
+              (click)="eliminarProductoFav(item.id_producto)">
+              <i class="bi bi-trash3"></i> Quitar
             </button>
           </td>
 
         </tr>
       </tbody>
+
     </table>
 
   </div>

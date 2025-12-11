@@ -1,60 +1,161 @@
-.form-wrapper {
+/* CONTENEDOR GENERAL */
+.compra-wrapper {
   min-height: 100vh;
   background: linear-gradient(90deg, #b34700 0%, #000000 100%);
-  padding: 4rem 1rem;
+  
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: flex-start; /* baja un poco desde arriba */
+  align-items: center;         /* CENTRA horizontal */
+  
+  padding-top: 40px;
 }
 
-form {
-  background-color: rgba(255, 255, 255, 0.95);
+/* TÍTULO */
+.titulo-compra {
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #ff8c42, #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* CAJA DEL FORMULARIO */
+.form-wgk {
+  width: 100%;
+  max-width: 700px;      /* ⬅️ ANCHO IDEAL para centrar */
+  
+  background: #111;
+  padding: 25px;
   border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.45);
+  border: 1px solid #ff8c4233;
 }
 
-.text-white {
-  color: white;
+/* FILAS */
+.row-wgk {
+  display: flex;
+  gap: 20px;
 }
 
-input, select, button {
+.row-wgk .input-box {
+  flex: 1;
+}
+
+/* LABELS */
+.input-box label {
+  color: #ff8c42;
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input-box span {
+  color: #ff4d4d;
+}
+
+/* INPUT GROUP */
+.input-group-wgk {
+  display: flex;
+  align-items: center;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  padding: 10px;
   border-radius: 10px;
+  gap: 10px;
 }
 
-button[type="submit"] {
-  background-color: #b34700;
-  border-color: #b34700;
-  color: white;
-  transition: all 0.3s ease;
+.input-group-wgk i {
+  color: #ff8c42;
+  font-size: 1.2rem;
 }
 
-button[type="submit"]:hover {
-  background-color: #000000;
-  border-color: #000000;
+.input-group-wgk input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
 }
 
-/* Modificar modal si es necesario */
-.modal-content {
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.modal-footer button {
+/* INPUTS NORMALES */
+.input-box input,
+.select-wgk {
+  width: 100%;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  padding: 10px;
   border-radius: 10px;
+  color: #fff;
 }
 
-.modal-footer .btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-  color: white;
+small {
+  color: #ff4d4d;
 }
 
-.modal-footer .btn-secondary {
-  background-color: #6c757d;
-  border-color: #6c757d;
-  color: white;
+/* SELECT */
+.select-wgk {
+  cursor: pointer;
 }
 
-.modal-footer .btn:hover {
-  opacity: 0.8;
+/* TRANSFERENCIA */
+.transfer-box {
+  margin-top: 10px;
+  padding: 10px;
+  background: #222;
+  border-radius: 10px;
+  border: 1px solid #444;
+  color: #ddd;
+}
+
+.btn-copy {
+  margin-left: 10px;
+  padding: 3px 8px;
+  border: 1px solid #ff8c42;
+  background: transparent;
+  color: #ff8c42;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-copy:hover {
+  background: #ff8c42;
+  color: #000;
+}
+
+/* TOTAL */
+.total-section {
+  margin-top: 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.total-section h3 {
+  color: #ff8c42;
+  margin-bottom: 15px;
+}
+
+/* BOTÓN FINALIZAR */
+.btn-finalizar {
+  background: #ff8c42;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-finalizar:hover {
+  background: #fff;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .row-wgk {
+    flex-direction: column;
+  }
 }

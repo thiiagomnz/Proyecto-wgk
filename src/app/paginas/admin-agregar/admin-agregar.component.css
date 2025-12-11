@@ -1,67 +1,164 @@
+/* ==========================================
+   🔥 CONTENEDOR GENERAL
+========================================== */
 .admin-container {
-  max-width: 900px;
-  margin: auto;
+  max-width: 950px;
+  margin: 40px auto;
   padding: 20px;
+  color: #fff;
+  font-family: "Segoe UI", sans-serif;
 }
 
+/* ==========================================
+   🔥 TÍTULO
+========================================== */
 .titulo {
   text-align: center;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #ff8c42, #b34700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+/* ==========================================
+   🔥 TARJETA FORMULARIO (EFECTO GLASS)
+========================================== */
 .form-card {
-  background: #ffffffdd;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 3px 10px #0003;
+  background: rgba(0, 0, 0, 0.65);
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(6px);
 }
 
+/* ==========================================
+   🔥 FILA FLEX
+========================================== */
 .fila {
   display: flex;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
+/* ==========================================
+   🔥 CAMPOS E INPUTS
+========================================== */
 .campo {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.input {
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #bbb;
+.campo label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #ffdbc1;
 }
 
+.input {
+  padding: 10px 12px;
+  background: #1a1a1a;
+  border-radius: 10px;
+  border: 1px solid #444;
+  color: #fff;
+  transition: 0.3s ease;
+  font-size: 15px;
+}
+
+.input:focus {
+  border-color: #ff8c42;
+  box-shadow: 0 0 8px rgba(255,140,66,0.7);
+  outline: none;
+}
+
+/* ==========================================
+   🔥 TALLES
+========================================== */
 .talles-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .talle-item {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  background: #111;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.25s;
 }
 
+.talle-item:hover {
+  background: #ff8c42;
+  color: #000;
+}
+
+/* ==========================================
+   🔥 PREVIEW DE IMAGEN
+========================================== */
 .preview img {
-  width: 150px;
+  width: 160px;
   border-radius: 10px;
-  margin-top: 10px;
+  margin-top: 12px;
+  border: 2px solid #ff8c42;
+  box-shadow: 0 0 12px rgba(255,140,66,0.5);
 }
 
+/* ==========================================
+   🔥 CHECKBOX DE NOVEDAD
+========================================== */
+.novedad-check {
+  margin-top: 15px;
+}
+
+.ck-wgk {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.ck-wgk input {
+  width: 18px;
+  height: 18px;
+}
+
+.ck-wgk span {
+  color: #ffdbc1;
+  font-weight: 600;
+}
+
+/* ==========================================
+   🔥 BOTÓN GUARDAR
+========================================== */
 .acciones {
-  margin-top: 20px;
+  margin-top: 25px;
   text-align: center;
 }
 
 .guardar {
-  padding: 10px 20px;
-  background: #007bff;
+  padding: 12px 35px;
+  background: linear-gradient(90deg, #b34700 0%, #000 100%);
   color: white;
-  border-radius: 10px;
+  border-radius: 30px;
   font-weight: bold;
   border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.guardar:hover {
+  background: linear-gradient(90deg, #ff8c42 0%, #000 100%);
+  transform: scale(1.05);
 }

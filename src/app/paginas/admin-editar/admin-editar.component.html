@@ -1,9 +1,12 @@
 <div class="admin-container">
 
-  <h2 class="titulo">Editar producto</h2>
+  <h2 class="titulo">Editar Producto</h2>
 
   <form [formGroup]="formulario" (ngSubmit)="guardarCambios()" class="form-card">
 
+    <!-- ============================
+         🟠 FILA PRINCIPAL
+    ============================ -->
     <div class="fila">
       <div class="campo">
         <label>Nombre</label>
@@ -21,38 +24,60 @@
       </div>
     </div>
 
+    <!-- ============================
+         🟠 MARCA
+    ============================ -->
     <div class="campo">
       <label>Marca</label>
       <select formControlName="marca" class="input">
-        <option *ngFor="let m of ['Adidas','Jordan 1','Jordan Retro 11','Jordan Retro 4','Jordan Retro 3','Artistas']">{{ m }}</option>
+        <option *ngFor="let m of ['Adidas','Jordan 1','Jordan Retro 11','Jordan Retro 4','Jordan Retro 3','Artistas']">
+          {{ m }}
+        </option>
       </select>
     </div>
 
+    <!-- ============================
+         🟠 TALLES DISPONIBLES
+    ============================ -->
     <div class="campo">
       <label>Talles disponibles</label>
 
       <div class="talles-container">
         <label *ngFor="let t of tallesLista" class="talle-item">
-          <input type="checkbox"
-                 [checked]="tallesSeleccionados.includes(t)"
-                 (change)="toggleTalle(t, $event)" />
-          {{ t }}
+          <input 
+            type="checkbox"
+            [checked]="tallesSeleccionados.includes(t)"
+            (change)="toggleTalle(t, $event)"
+          />
+          <span>{{ t }}</span>
         </label>
       </div>
     </div>
 
+    <!-- ============================
+         🟠 IMAGEN
+    ============================ -->
     <div class="campo">
       <label>Imagen</label>
-      <input type="file" (change)="onFileChange($event)" class="input">
+      <input type="file" (change)="onFileChange($event)" class="input" />
     </div>
 
-    <div class="preview" *ngIf="imagenPrevia">
-      <img [src]="imagenPrevia">
+    <!-- 🔥 Preview WGK -->
+    <div class="preview" *ngIf="imagenNueva || imagenActual">
+      <img [src]="imagenNueva ? imagenNueva : imagenActual" />
     </div>
 
+    <!-- ============================
+         🟠 BOTONES
+    ============================ -->
     <div class="acciones">
-      <button class="btn guardar" type="submit">Subir</button>
-      <button class="btn limpiar" type="button" (click)="router.navigate(['/admin'])">Volver</button>
+      <button class="btn guardar" type="submit">
+        💾 Guardar cambios
+      </button>
+
+      <button class="btn volver" type="button" (click)="router.navigate(['/admin'])">
+        ← Volver
+      </button>
     </div>
 
   </form>

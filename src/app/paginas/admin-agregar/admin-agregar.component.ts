@@ -4,6 +4,8 @@ import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angula
 import { ProductService } from '../../servicios/productos.service';
 import { Router } from '@angular/router';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-agregar-producto',
   standalone: true,
@@ -27,17 +29,40 @@ export class AgregarProductoComponent {
     this.crearFormulario();
   }
 
+  // =========================================================
+  // 🔥 SWEETALERT GLOBAL
+  // =========================================================
+  alerta(titulo: string, texto: string, icono: any) {
+    Swal.fire({
+      title: titulo,
+      text: texto,
+      icon: icono,
+      background: "#111",
+      color: "#fff",
+      confirmButtonColor: "#b34700",
+      iconColor: "#ff8c42",
+      confirmButtonText: "Aceptar"
+    });
+  }
+
+  // =========================================================
+  // 🔥 CREAR FORMULARIO
+  // =========================================================
   crearFormulario() {
     this.formulario = this.fb.group({
       nombre: ['', Validators.required],
       precio: [0, [Validators.required, Validators.min(1)]],
-      stock: [0, Validators.required],
+      stock: [0, [Validators.required, Validators.min(0)]],
       marca: ['', Validators.required],
       tallesDisponibles: [[]],
-      imagen: ['']
+      imagen: [''],
+      es_novedad: [false]
     });
   }
 
+  // =========================================================
+  // 🔥 MANEJO DE TALLES
+  // =========================================================
   toggleTalle(talle: number, event: any) {
     if (event.target.checked) {
       this.tallesSeleccionados.push(talle);
@@ -50,6 +75,9 @@ export class AgregarProductoComponent {
     });
   }
 
+  // =========================================================
+  // 🔥 PREVISUALIZACIÓN DE IMAGEN
+  // =========================================================
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (!file) return;
@@ -61,25 +89,69 @@ export class AgregarProductoComponent {
     reader.readAsDataURL(file);
   }
 
+  // =========================================================
+  // 🔥 GUARDAR PRODUCTO
+  // =========================================================
   guardar() {
+
+    // 🔥 VALIDACIÓN COMPLETA
+    if (this.formulario.invalid) {
+      return this.alerta(
+        "Campos incompletos",
+        "Debes completar todos los campos obligatorios.",
+        "warning"
+      );
+    }
+
+    if (this.tallesSeleccionados.length === 0) {
+      return this.alerta(
+        "Faltan talles",
+        "Selecciona al menos un talle para el producto.",
+        "warning"
+      );
+    }
+
+    if (!this.archivoImagen) {
+      return this.alerta(
+        "Falta imagen",
+        "Debes subir una imagen para el producto.",
+        "warning"
+      );
+    }
+
+    // 🔥 ARMADO DE FORM DATA
     const formData = new FormData();
     formData.append("nombre", this.formulario.value.nombre);
     formData.append("precio", this.formulario.value.precio);
     formData.append("stock", this.formulario.value.stock);
     formData.append("marca", this.formulario.value.marca);
-
     formData.append("tallesDisponibles", JSON.stringify(this.tallesSeleccionados));
+    formData.append("es_novedad", this.formulario.value.es_novedad ? "1" : "0");
 
     if (this.archivoImagen) {
       formData.append("imagen", this.archivoImagen);
     }
 
+    // 🔥 GUARDAR EN BACKEND
     this.productService.crearProducto(formData).subscribe({
       next: () => {
-        alert("Producto creado con éxito");
-        this.router.navigate(['/admin']); // Volver al panel o lista
+        Swal.fire({
+          title: "Producto creado",
+          text: "El producto fue agregado exitosamente.",
+          icon: "success",
+          background: "#111",
+          color: "#fff",
+          confirmButtonColor: "#b34700",
+          iconColor: "#ff8c42"
+        });
+
+        this.router.navigate(['/admin']);
       },
-      error: (err) => console.error(err)
+      error: err => {
+        console.error(err);
+        this.alerta("Error", "Ocurrió un problema al crear el producto.", "error");
+      }
     });
   }
+
 }

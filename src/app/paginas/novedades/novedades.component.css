@@ -1,83 +1,85 @@
-/* Cards generales */
+/* =========================================================
+   🟠 CARD GENERAL (MEJORADA)
+   ========================================================= */
 .card {
-  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
-  border-radius: 12px;
-  box-shadow: 0 8px 15px rgba(0,0,0,0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(135deg, #b34700 0%, #000000 100%);
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  transition: transform .28s ease, box-shadow .28s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* Efecto hover de la card */
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 25px rgba(250, 250, 250, 0.6);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 14px 28px rgba(255,255,255,0.28);
 }
 
-/* Texto NUEVO / etiqueta */
-.card .nuevo-label {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 15px;
-  text-align: center;
-}
-
-/* Imagen de producto */
-.card-img-top {
+/* =========================================================
+   🟠 IMAGEN CENTRADA — MÁS LIMPIA Y RESPONSIVA
+   ========================================================= */
+.card-img-box {
   width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-bottom: 2px solid #000000;
-  transition: transform 0.3s ease;
-}
-
-.card:hover .card-img-top {
-  transform: scale(1.05);
-}
-
-/* Cuerpo de la card */
-.card-body {
-  flex-grow: 1;
-  padding: 15px 20px;
+  height: 260px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: #ffffff;
+  border-bottom: 3px solid #000000;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+  transition: transform .35s ease;
+}
+
+.card:hover .product-image {
+  transform: scale(1.07);
+}
+
+/* =========================================================
+   🟠 TEXTO, PRECIOS, BOTONES
+   ========================================================= */
+.card-body {
+  padding: 18px 20px;
+  flex-grow: 1;
   text-align: center;
 }
 
-/* Nombre del producto */
 .card-title {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   color: #ffffff;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
 }
 
-/* Precio */
 .card-text {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #ffffff !important;
-  padding: 5px 10px;
-  border-radius: 8px;
-  display: inline-block;
-  margin-bottom: 15px;
+  color: #ffe6cc !important;
+  margin-bottom: 16px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-/* Botones */
+/* =========================================================
+   🟠 BOTONES — MÁS PREMIUM
+   ========================================================= */
 .btn {
-  font-weight: 600;
+  font-weight: 700;
   border-radius: 30px;
   padding: 10px 18px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  letter-spacing: .6px;
+  transition: .28s ease;
 }
 
-/* Botón Agregar al carrito */
+/* Botón carrito */
 .btn-success {
   background: transparent;
   border: 2px solid #ffffff;
@@ -85,68 +87,76 @@
 }
 
 .btn-success:hover {
-  background-color: #ffffff;
-  color: #121212;
+  background: #ffffff;
+  color: #000000;
+  transform: scale(1.05);
 }
 
-/* Botón agregar a favoritos */
-.btn-outline-light {
+/* Botón favoritos */
+.btn-outline-danger {
   border: 2px solid #ffffff;
   color: #ffffff;
 }
 
-.btn-outline-light:hover {
-  background-color: #ffffff;
-  color: #121212;
+.btn-outline-danger:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: scale(1.05);
 }
 
-/* Talles circulares */
+/* =========================================================
+   🟠 TALLES — MÁS FINOS Y REACTIVOS
+   ========================================================= */
 .talle-circle {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   border: 2px solid #ffffff;
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
+  align-items: center;
   color: #ffffff;
-  margin: 0 5px 5px 0;
-  transition: all 0.2s ease;
+  margin: 6px;
+  transition: .25s ease;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .talle-circle:hover {
-  background-color: #ffffff;
-  color: #121212;
+  background: #ffffff;
+  color: #000000;
+  transform: scale(1.12);
 }
 
 .talle-circle.selected {
-  background-color: #ffffff;
-  color: #121212;
-  font-weight: bold;
-  transform: scale(1.1);
+  background: #ffffff;
+  color: #000000;
+  border-color: #b34700;
+  transform: scale(1.15);
 }
 
-/* Responsive */
+/* =========================================================
+   🟠 RESPONSIVE
+   ========================================================= */
 @media (max-width: 768px) {
-  .card-img-top {
-    height: 200px;
+  .card-img-box {
+    height: 210px;
   }
 }
 
 @media (max-width: 480px) {
-  .card-img-top {
-    height: 150px;
+  .card-img-box {
+    height: 160px;
   }
+
   .card-title {
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
-  .card-text {
-    font-size: 0.95rem;
-  }
+
   .talle-circle {
-    width: 35px;
-    height: 35px;
-    font-size: 0.85rem;
+    width: 36px;
+    height: 36px;
+    font-size: .85rem;
   }
 }

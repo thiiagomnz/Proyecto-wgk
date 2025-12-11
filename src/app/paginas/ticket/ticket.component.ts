@@ -13,67 +13,66 @@ import { CommonModule } from '@angular/common';
 })
 export class TicketComponent implements OnInit {
 
-  // Objeto que contiene los datos del ticket (número, ruta, etc.)
-  ticket: any = null;
+  ticket: any = null;        // Datos completos del ticket
+  idCompra!: number;         // ID recibido por URL
+  pdfUrl!: SafeResourceUrl;  // URL segura para iframe
 
-  // ID de la compra recibido desde la URL
-  idCompra!: number;
-
-  // URL segura del PDF para mostrarlo en iframe/embed
-  pdfUrl!: SafeResourceUrl;
+  cargando: boolean = true;  // Para mostrar spinner si querés
+  errorMsg: string = '';     // Error en caso de 404 o fallo
 
   constructor(
-    // Permite obtener parámetros de la ruta (id de la compra).
     private route: ActivatedRoute,
-
-    // Servicio encargado de obtener tickets desde el backend.
     private ticketService: TicketService,
-
-    // Necesario para permitir URLs de PDFs de manera segura en Angular.
     private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
 
-    // Obtiene el parámetro "id" de la URL.
-    // Ejemplo: /ticket/15 → idCompra = 15
+    // Leer ID de compra desde la URL
     this.idCompra = Number(this.route.snapshot.paramMap.get('id'));
 
-    // Llama al backend para obtener datos del ticket asociados a la compra.
+    if (!this.idCompra) {
+      this.errorMsg = "ID de compra inválido.";
+      this.cargando = false;
+      return;
+    }
+
+    // Llamada al backend para obtener ticket
     this.ticketService.obtenerPorCompra(this.idCompra).subscribe({
 
-      next: (ticket) => {
-        this.ticket = ticket;
+      next: (res) => {
+        this.ticket = res;
 
-        // Construye manualmente la URL pública donde se guarda el PDF en el servidor.
-        const url = `http://localhost/api_proyecto/public/tickets/ticket_${ticket.numero_ticket}.pdf`;
+        // Construir la ruta real del PDF
+        const url = `http://localhost/api_proyecto/public/tickets/ticket_${this.ticket.numero_ticket}.pdf`;
 
-        // Angular bloquea URLs externas por seguridad, así que hay que "sanitizar" la URL
-        // para usarla como src en un <iframe> o <embed>.
+        // Habilitar URL en iframe
         this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
+        this.cargando = false;
       },
 
-      // Si no existe ticket para la compra, se deja en null para mostrar mensaje adecuado.
-      error: () => {
+      error: (err) => {
         this.ticket = null;
+        this.errorMsg = "No se encontró ticket para esta compra.";
+        this.cargando = false;
       }
     });
   }
 
-  // Método para descargar el PDF del ticket directamente desde el backend.
+  // Descargar PDF en nueva pestaña
   descargarPDF(): void {
-
-    // Si no hay ticket cargado, no se puede descargar.
     if (!this.ticket) return;
 
-    // Llama al backend, que envía el PDF como Blob.
-    this.ticketService.descargar(this.ticket.numero_ticket).subscribe(blob => {
-
-      // Crea una URL temporal en memoria para abrir el PDF.
-      const url = window.URL.createObjectURL(blob);
-
-      // Abre el PDF en una nueva pestaña del navegador.
-      window.open(url, '_blank');
+    this.ticketService.descargar(this.ticket.numero_ticket).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      },
+      error: () => {
+        alert("No se pudo descargar el PDF.");
+      }
     });
   }
+
 }

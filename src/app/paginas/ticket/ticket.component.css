@@ -1,0 +1,127 @@
+/* 🌑 Fondo */
+.ticket-page {
+  min-height: 100vh;
+  background: linear-gradient(90deg, #b34700, #000);
+  padding: 3rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Caja */
+.ticket-box {
+  width: 100%;
+  max-width: 900px;
+  background: #111;
+  padding: 2rem;
+  border-radius: 16px;
+  color: #ececec;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  border: 1px solid #ff8c4277;
+}
+
+/* Título */
+.titulo-ticket {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 900;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, #ff8c42, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Secciones */
+.ticket-section {
+  margin-top: 1.8rem;
+  background: #191919;
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #ffffff22;
+}
+
+.ticket-section h3 {
+  margin-bottom: 1rem;
+  color: #ff8c42;
+  font-weight: 700;
+}
+
+/* Info general */
+.info-block p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* TABLA DE PRODUCTOS */
+.productos-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.productos-table th {
+  background: #222;
+  color: #ff8c42;
+  padding: 10px;
+  text-transform: uppercase;
+}
+
+.productos-table td {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+/* Totales */
+.total-section {
+  text-align: right;
+  margin-top: 1.8rem;
+}
+
+.total-section h2 {
+  margin-top: 0.8rem;
+  color: #ff8c42;
+  font-size: 1.8rem;
+}
+
+/* Botones */
+.btn-group-ticket {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.btn-descargar {
+  padding: 10px 20px;
+  border: 2px solid #ff8c42;
+  border-radius: 10px;
+  background: transparent;
+  color: #ff8c42;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-descargar:hover {
+  background: #ff8c42;
+  color: #000;
+}
+
+.btn-volver {
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background: #ccc;
+  color: #000;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.pdf-container {
+  margin-top: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pdf-frame {
+  width: 100%;
+  height: 500px;
+  border: none;
+}

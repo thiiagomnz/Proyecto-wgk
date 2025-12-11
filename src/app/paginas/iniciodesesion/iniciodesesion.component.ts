@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../servicios/auth.service';
 
+import Swal from 'sweetalert2'; // ⭐ IMPORTANTE
+
 @Component({
   selector: 'app-iniciodesesion',
   standalone: true,
@@ -18,37 +20,78 @@ export class IniciodesesionComponent {
     password: ''
   };
 
-  error: string = '';
-
   constructor(
     private authService: AuthService,
     private router: Router
   ) {}
 
+  // 🔥 SWEETALERT GLOBAL PERSONALIZADO
+  private alerta(titulo: string, texto: string, icono: any) {
+    Swal.fire({
+      title: titulo,
+      text: texto,
+      icon: icono,
+      background: "#111",
+      color: "#fff",
+      confirmButtonColor: "#b34700",
+      iconColor: "#ff8c42"
+    });
+  }
+
+  // =====================================================
+  // 🔥 FUNCIÓN LOGIN
+  // =====================================================
   onLogin(): void {
-    console.log('onLogin ejecutado'); // ✅ Verifica que se dispare
 
     if (!this.usuario.email || !this.usuario.password) {
-      this.error = 'Complete todos los campos.';
-      return;
+      return this.alerta(
+        "Campos incompletos",
+        "Debes completar todos los campos.",
+        "warning"
+      );
     }
 
     this.authService.login(this.usuario).subscribe({
       next: (res) => {
-        console.log('Respuesta backend:', res); // ✅ Verifica que llega JSON
-        this.error = '';
 
         if (res?.token) {
-          alert('Inicio de sesión exitoso');
-          this.router.navigate(['/productos']);
+          // 🔥 ALERTA DE ÉXITO
+          Swal.fire({
+            title: "Bienvenido",
+            text: "Inicio de sesión exitoso",
+            icon: "success",
+            background: "#111",
+            color: "#fff",
+            confirmButtonColor: "#b34700",
+            iconColor: "#ff8c42",
+            timer: 1600,
+            showConfirmButton: false
+          });
+
+          // 🔥 Redirección suave
+          setTimeout(() => {
+            this.router.navigate(['/productos']);
+          }, 1500);
+
         } else {
-          this.error = 'No se recibió token del servidor.';
+          this.alerta(
+            "Error inesperado",
+            "No se recibió token desde el servidor.",
+            "error"
+          );
         }
       },
+
       error: (err) => {
-        console.error('Error al iniciar sesión', err);
-        this.error = 'Credenciales incorrectas o error en el servidor.';
+        console.error("Error al iniciar sesión", err);
+
+        this.alerta(
+          "Credenciales incorrectas",
+          "Email o contraseña inválidos.",
+          "error"
+        );
       }
     });
   }
+
 }

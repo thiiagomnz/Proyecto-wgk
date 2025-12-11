@@ -9,16 +9,24 @@
   <!-- Mensaje de error -->
   <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
 
-  <!-- Listado de productos -->
+  <!-- Listado -->
   <div class="row g-4">
     <div class="col-md-4" *ngFor="let producto of productosFiltrados">
       <div class="card h-100 shadow-sm">
 
-        <!-- 🔥 NUEVO CONTENEDOR PARA CENTRAR IMÁGENES -->
+        <!-- Imagen centrada -->
         <div class="card-img-box">
           <img
+            *ngIf="producto.imagen"
             [src]="producto.imagen"
             alt="{{ producto.nombre }}"
+            class="product-image"
+          />
+
+          <img
+            *ngIf="!producto.imagen"
+            src="assets/img/no-image.png"
+            alt="Sin imagen"
             class="product-image"
           />
         </div>
@@ -32,23 +40,38 @@
 
           <!-- Talles -->
           <div class="d-flex justify-content-center flex-wrap mb-3">
-            <div *ngFor="let talle of producto.tallesDisponibles"
-                 class="talle-circle me-2 mb-2"
-                 [class.selected]="esSeleccionado(producto, talle)"
-                 (click)="toggleTalle(producto, talle)">
+            <div 
+              *ngFor="let talle of producto.tallesDisponibles"
+              class="talle-circle me-2 mb-2"
+              [class.selected]="esSeleccionado(producto, talle)"
+              (click)="toggleTalle(producto, talle)">
               {{ talle }}
             </div>
           </div>
 
           <!-- Botones -->
           <div class="mt-3 d-flex flex-column gap-2">
-            <button class="btn btn-success btn-sm" (click)="agregar(producto)">
+
+            <!-- AGREGAR AL CARRITO -->
+            <button class="btn btn-success btn-sm"
+              (click)="
+                authService.isLoggedIn()
+                  ? agregar(producto)
+                  : mostrarAlerta('Inicia sesión', 'Debes iniciar sesión para agregar al carrito.', 'warning')
+              ">
               <i class="bi bi-cart-plus"></i> Agregar al carrito
             </button>
 
-            <button class="btn btn-outline-danger btn-sm" (click)="agregarFav(producto)">
+            <!-- FAVORITOS -->
+            <button class="btn btn-outline-danger btn-sm"
+              (click)="
+                authService.isLoggedIn()
+                  ? agregarFav(producto)
+                  : mostrarAlerta('Inicia sesión', 'Debes iniciar sesión para agregar a favoritos.', 'warning')
+              ">
               <i class="bi bi-heart"></i> Agregar a favoritos
             </button>
+
           </div>
 
         </div>

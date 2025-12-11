@@ -1,116 +1,170 @@
-/* CONTENEDOR PRINCIPAL */
+/* =========================================================
+   🟠 CONTENEDOR PRINCIPAL
+   ========================================================= */
 .card-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+
+  /* Fondo WGK */
   background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 2rem;
 }
 
-/* CAJA DEL FORMULARIO */
+/* =========================================================
+   🟠 CAJA DEL FORMULARIO
+   ========================================================= */
 .card-box {
-  background-color: #ffffff;
-  padding: 2.5rem 2rem;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-  max-width: 500px;
+  background: #111; /* Negro elegante */
+  padding: 2.5rem 2.8rem;
+  border-radius: 14px;
   width: 100%;
+  max-width: 420px;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
   text-align: center;
+  border: 2px solid #b34700;
 }
 
-/* TÍTULO */
+/* =========================================================
+   🟠 TÍTULO PRINCIPAL
+   ========================================================= */
 .card-box h2 {
   margin-bottom: 1.5rem;
-  color: #b34700;
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #b34700, #ff8c42);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* FORMULARIO */
+/* =========================================================
+   🟠 FORMULARIO
+   ========================================================= */
 .card-form {
   width: 100%;
 }
 
-/* GRUPO DE INPUTS */
+/* =========================================================
+   🟠 GRUPO DE INPUTS
+   ========================================================= */
 .input-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.3rem;
   text-align: left;
 }
 
 .input-group label {
-  display: block;
-  margin-bottom: 0.4rem;
-  color: #333;
+  color: #f0f0f0;
   font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: block;
 }
 
 .input-group input {
   width: 100%;
-  padding: 0.6rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 0.7rem 1rem;
+
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 8px;
+
+  color: #fff;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+
+  transition: all 0.3s ease;
 }
 
 .input-group input:focus {
   border-color: #b34700;
+  box-shadow: 0 0 8px rgba(179, 71, 0, 0.7);
+  background: #1a1a1a;
   outline: none;
 }
 
-/* BOTÓN PRINCIPAL */
+/* =========================================================
+   🟠 BOTÓN PRINCIPAL (REGISTRO)
+   ========================================================= */
 .card-btn {
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(90deg, #b34700 0%, #000000 100%);
+  padding: 0.9rem;
+
+  background: transparent;
   color: white;
-  border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+
+  border: 2px solid #ffffff;
+
   font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+
   cursor: pointer;
-  transition: background 0.3s ease;
-  margin-top: 0.5rem;
+  transition: 0.3s ease;
+  margin-top: 0.8rem;
 }
 
 .card-btn:hover {
-  background: linear-gradient(90deg, #a14000 0%, #111 100%);
+  background: white;
+  color: #000;
+  transform: scale(1.03);
 }
 
-/* TEXTO "Ó" */
+/* =========================================================
+   🟠 TEXTO "Ó"
+   ========================================================= */
 .or-text {
   margin: 1.2rem 0;
   font-size: 0.9rem;
-  color: #666;
+  color: #ccc;
 }
 
-/* BOTÓN DE GOOGLE */
+/* =========================================================
+   🟠 BOTÓN GOOGLE
+   ========================================================= */
 .google-btn {
-  background-color: white;
-  color: #e4e4e4;
-  border: 1px solid #ccc;
+  background: #222;
+  color: white;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  align-items: center;
+  gap: .5rem;
+
+  padding: 0.8rem;
+  cursor: pointer;
+
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.google-btn:hover {
+  background: #ffffff;
+  color: #000000;
 }
 
 .google-btn i {
-  color: #ffffff; /* color Google */
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  color: inherit;
 }
 
-/* TEXTO DE INICIO DE SESIÓN */
+/* =========================================================
+   🟠 TEXTO DE INICIO DE SESIÓN
+   ========================================================= */
 .signup-text {
-  margin-top: 1.5rem;
+  margin-top: 1.4rem;
+  color: #ccc;
   font-size: 0.9rem;
-  color: #555;
 }
 
 .signup-text a {
-  color: #b34700;
+  color: #ff8c42;
+  font-weight: 700;
   text-decoration: none;
-  font-weight: 600;
 }
 
 .signup-text a:hover {

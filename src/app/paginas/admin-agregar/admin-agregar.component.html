@@ -4,26 +4,33 @@
 
   <form [formGroup]="formulario" (ngSubmit)="guardar()" class="form-card">
 
+    <!-- ================================
+         🔸 FILA PRINCIPAL
+    ================================= -->
     <div class="fila">
+
       <div class="campo">
         <label>Nombre</label>
-        <input formControlName="nombre" class="input" />
+        <input formControlName="nombre" class="input wgk-input" placeholder="Ingrese el nombre del producto" />
       </div>
 
       <div class="campo">
         <label>Precio</label>
-        <input type="number" formControlName="precio" class="input" />
+        <input type="number" formControlName="precio" class="input wgk-input" placeholder="$0" />
       </div>
 
       <div class="campo">
         <label>Stock</label>
-        <input type="number" formControlName="stock" class="input" />
+        <input type="number" formControlName="stock" class="input wgk-input" placeholder="Cantidad" />
       </div>
     </div>
 
+    <!-- ================================
+         🔸 MARCA
+    ================================= -->
     <div class="campo">
       <label>Marca</label>
-      <select formControlName="marca" class="input">
+      <select formControlName="marca" class="input wgk-input">
         <option value="Adidas">Adidas</option>
         <option value="Jordan 1">Jordan 1</option>
         <option value="Jordan Retro 11">Jordan Retro 11</option>
@@ -33,28 +40,50 @@
       </select>
     </div>
 
+    <!-- ================================
+         🔸 TALLES
+    ================================= -->
     <div class="campo">
       <label>Talles disponibles</label>
 
       <div class="talles-container">
         <label *ngFor="let t of tallesLista" class="talle-item">
           <input type="checkbox" [value]="t" (change)="toggleTalle(t, $event)" />
-          {{ t }}
+          <span>{{ t }}</span>
         </label>
       </div>
     </div>
 
+    <!-- ================================
+         🔸 IMAGEN
+    ================================= -->
     <div class="campo">
-      <label>Imagen</label>
-      <input type="file" (change)="onFileChange($event)" class="input" />
+      <label>Imagen del producto</label>
+      <input type="file" (change)="onFileChange($event)" class="input wgk-input" />
     </div>
 
+    <!-- PREVIEW -->
     <div class="preview" *ngIf="imagenPrevia">
       <img [src]="imagenPrevia" />
     </div>
 
+    <!-- ================================
+         🔸 NOVEDAD
+    ================================= -->
+    <div class="campo novedad-check">
+      <label class="ck-wgk">
+        <input type="checkbox" formControlName="es_novedad" />
+        <span>¿Mostrar como novedad?</span>
+      </label>
+    </div>
+
+    <!-- ================================
+         🔸 BOTÓN SUBIR
+    ================================= -->
     <div class="acciones">
-      <button class="btn guardar" type="submit">Subir</button>
+      <button class="btn guardar" type="submit">
+        <i class="fa fa-upload"></i> Subir producto
+      </button>
     </div>
 
   </form>

@@ -9,6 +9,8 @@ import { BuscadorService } from '../../servicios/buscador.service';
 import { ProductService } from '../../servicios/productos.service';
 import { AuthService } from '../../servicios/auth.service';
 
+import Swal from 'sweetalert2';   // ⭐ SWEETALERT2
+
 @Component({
   selector: 'app-productos',
   standalone: true,
@@ -20,6 +22,7 @@ export class ProductosComponent implements OnInit {
 
   Productos: Producto[] = [];
   seleccionados: { [id: number]: number[] } = {};
+
   marcaSeleccionada: string = 'Todas';
   busqueda: string = '';
 
@@ -32,7 +35,7 @@ export class ProductosComponent implements OnInit {
     private route: ActivatedRoute,
     public buscadorService: BuscadorService,
     private productService: ProductService,
-    public authService: AuthService            // 👈 agregado
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -51,43 +54,43 @@ export class ProductosComponent implements OnInit {
     this.cargarProductos();
   }
 
+  // ========================================================
+  // ⭐ SWEETALERT PERSONALIZADO
+  // ========================================================
+  mostrarAlerta(titulo: string, texto: string, icono: any) {
+    Swal.fire({
+      title: titulo,
+      text: texto,
+      icon: icono,
+      background: '#111',
+      color: '#fff',
+      confirmButtonColor: '#b34700',
+      iconColor: '#ff8c42',
+      confirmButtonText: 'Aceptar'
+    });
+  }
+
+  // ========================================================
+  // ⭐ CARGAR PRODUCTOS
+  // ========================================================
   cargarProductos() {
     this.cargando = true;
 
     this.productService.obtenerProductos().subscribe({
       next: (res) => {
-        console.log("Productos desde backend:", res);
-
-        this.Productos = res.map((p: any) => ({
-
-          id: p.id,
-          nombre: p.nombre,
-          precio: p.precio,
-          marca: p.marca,
-
-          imagen: p.imagen
-            ? `http://localhost/api_proyecto/public/uploads/${p.imagen}`
-            : '',
-
-          tallesDisponibles: Array.isArray(p.tallesDisponibles)
-            ? p.tallesDisponibles
-            : JSON.parse(p.tallesDisponibles || "[]"),
-
-          stock: p.stock ?? 0,
-          cantidad: p.stock ?? 0,
-          disponible: true,
-        }));
-
+        this.Productos = res;
         this.cargando = false;
       },
-      error: (err) => {
-        console.error("Error al cargar productos:", err);
-        this.error = 'No se pudieron cargar los productos.';
+      error: () => {
+        this.mostrarAlerta("Error", "No se pudieron cargar los productos.", "error");
         this.cargando = false;
       }
     });
   }
 
+  // ========================================================
+  // ⭐ FILTRO DE PRODUCTOS
+  // ========================================================
   get productosFiltrados(): Producto[] {
     return this.Productos.filter(p => {
       const coincideMarca =
@@ -101,72 +104,70 @@ export class ProductosComponent implements OnInit {
     });
   }
 
+  // ========================================================
+  // ⭐ MANEJO DE TALLES
+  // ========================================================
   toggleTalle(producto: Producto, talle: number) {
-    if (!producto.tallesDisponibles.includes(talle)) return;
-
     if (!this.seleccionados[producto.id]) {
       this.seleccionados[producto.id] = [];
     }
 
     const idx = this.seleccionados[producto.id].indexOf(talle);
 
-    if (idx > -1) this.seleccionados[producto.id].splice(idx, 1);
-    else this.seleccionados[producto.id].push(talle);
+    if (idx >= 0) {
+      this.seleccionados[producto.id].splice(idx, 1);
+    } else {
+      this.seleccionados[producto.id].push(talle);
+    }
   }
 
   esSeleccionado(producto: Producto, talle: number): boolean {
     return (this.seleccionados[producto.id] || []).includes(talle);
   }
 
-  // 🔥🔥🔥 AGREGAR AL CARRITO — ahora protege si no inició sesión
+  // ========================================================
+  // ⭐ AGREGAR AL CARRITO
+  // ========================================================
   agregar(producto: Producto) {
 
-    // 1️⃣ Verificar si está logueado
     if (!this.authService.isLoggedIn()) {
-      alert("Debes iniciar sesión para agregar al carrito.");
-      return; // ❌ corta todo
-    }
-
-    const tallesSeleccionados = this.seleccionados[producto.id] || [];
-
-    if (tallesSeleccionados.length === 0) {
-      alert("Selecciona al menos un talle");
+      this.mostrarAlerta("Inicia sesión", "Debes iniciar sesión para agregar al carrito.", "warning");
       return;
     }
 
-    // 2️⃣ Enviar al backend porque ya está logueado
-    tallesSeleccionados.forEach(talle => {
-      this.carritoService.agregarAlCarrito({ producto, talle }).subscribe({
-        next: () => {
-          this.carritoService.cargarCarrito();
-        },
-        error: err => console.error(err)
-      });
+    const talles = this.seleccionados[producto.id] || [];
+
+    if (talles.length === 0) {
+      this.mostrarAlerta("Selecciona un talle", "Debes elegir al menos un talle.", "warning");
+      return;
+    }
+
+    talles.forEach(talle => {
+      this.carritoService.agregarAlCarrito({ producto, talle }).subscribe();
     });
 
-    alert("Agregado al carrito");
+    this.mostrarAlerta("Agregado", "Producto agregado al carrito correctamente.", "success");
+
     this.seleccionados[producto.id] = [];
   }
 
- agregarFav(producto: Producto) {
+  // ========================================================
+  // ⭐ AGREGAR A FAVORITOS
+  // ========================================================
+  agregarFav(producto: Producto) {
 
-  // 1️⃣ Verificar si el usuario NO inició sesión
-  if (!this.authService.isLoggedIn()) {
-    alert("Debes iniciar sesión para agregar a favoritos.");
-    return;
-  }
-
-  // 2️⃣ Llamar al servicio y SUSCRIBIRSE
-  this.favoritoService.agregarAFavoritos(producto).subscribe({
-    next: (res) => {
-      console.log("Favorito agregado:", res);
-      alert("Producto agregado a favoritos");
-    },
-    error: (err) => {
-      console.error("Error al agregar favorito:", err);
-      alert("No se pudo agregar a favoritos");
+    if (!this.authService.isLoggedIn()) {
+      this.mostrarAlerta("Inicia sesión", "Debes iniciar sesión para agregar a favoritos.", "warning");
+      return;
     }
-  });
-}
+
+    this.favoritoService.agregarAFavoritos(producto).subscribe({
+      next: () =>
+        this.mostrarAlerta("Agregado", "Producto agregado a favoritos.", "success"),
+
+      error: () =>
+        this.mostrarAlerta("Error", "No se pudo agregar a favoritos.", "error")
+    });
+  }
 
 }

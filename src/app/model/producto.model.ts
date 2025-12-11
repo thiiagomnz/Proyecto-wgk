@@ -10,4 +10,5 @@ export interface Producto{
     talle?: number;
     tallesDisponibles: number[];
      stock: number;            // agregado
+es_novedad?: number;    // 👈 OPCIONAL = no rompe nada
 }
